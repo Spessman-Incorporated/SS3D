@@ -1,0 +1,18 @@
+{
+    "name": "SS3D.Core",
+    "rootNamespace": "",
+    "references": [
+        "GUID:607e5fc428cee124e9280c8cd460767b",
+        "GUID:30817c1a0e6d646d99c048fc403f5979",
+        "GUID:92a1e40b8cccf8645adbdd275ac6371a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
