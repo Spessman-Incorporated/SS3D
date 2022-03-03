@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b78077f892ed428e9101d521831319d4, type: 3}
+  m_Name: EventChannels
+  m_EditorClassIdentifier: 
+  ApplicationState: {fileID: 11400000, guid: 1d89364275a85d04d88f99f78ed80bb5, type: 2}
+  SceneLoader: {fileID: 11400000, guid: e42d74fe855872a408d63020994fb62f, type: 2}
+  SessionNetworkHelper: {fileID: 11400000, guid: 9bfaf45aadf7d644c9f8feb45d0a4d1d, type: 2}

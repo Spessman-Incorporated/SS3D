@@ -6,6 +6,5 @@ namespace SS3D.Core.SceneManagement
     public class Scenes : ScriptableObject
     {
         public SceneReference Startup;
-        public SceneReference Setup;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,17 @@ namespace SS3D.Core.SceneManagement
     public class SceneLoaderManager : MonoBehaviour
     { 
         [SerializeField] private ApplicationStateManager applicationStateManager;
+
+        private void Awake()
+        {
+            SubscribeToEvents();
+        }
+
+        private void SubscribeToEvents()
+        {
+            applicationStateManager.EventChannels.SceneLoader.SceneLoadRequested += LoadScene;
+        }
+        
         /// <summary>
         /// Tries to load a scene
         /// </summary>
@@ -46,7 +58,7 @@ namespace SS3D.Core.SceneManagement
             AsyncOperation operation = (SceneManager.LoadSceneAsync(scene, loadSceneMode));
             
             yield return new WaitUntil( () => operation.isDone);
-            applicationStateManager.EventChannels.ApplicationState.InvokeSetupSceneLoaded();
+            applicationStateManager.EventChannels.SceneLoader.InvokeSceneLoadCompleted(scene);
             
             SceneManager.SetActiveScene(SceneManager.GetSceneByPath(scene.ScenePath));
         }

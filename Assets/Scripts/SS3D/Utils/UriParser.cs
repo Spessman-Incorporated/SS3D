@@ -14,7 +14,7 @@ namespace SS3D.Utils
         {
             UriBuilder uriBuilder = new UriBuilder
             {
-                Scheme = "tcp4",
+                Scheme = "kcp",
                 Host = IPAddress.TryParse(ip, out IPAddress address) ? address.ToString() : "localhost"
             };
 

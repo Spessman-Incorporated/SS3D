@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using SS3D.Core.EventChannel;
 using UnityEngine;
 using UriParser = SS3D.Utils.UriParser;
 
@@ -17,12 +18,14 @@ namespace SS3D.Core.Networking
         private NetworkManager _networkManager;
         private List<string> _commandLineArgs;
 
+        private EventChannels eventChannels => applicationStateManager.EventChannels;
+
         private bool _isHost;
         /// <summary>
         /// SS3D server IP address
         /// </summary>
         private string _ip;
-        private string _username;
+        private string _ckey;
         
         private void Awake()
         {
@@ -37,29 +40,17 @@ namespace SS3D.Core.Networking
 
         private void SubscribeToEvents()
         {
-            applicationStateManager.EventChannels.ApplicationState.SetupSceneLoaded += ProcessCommandLineArgs;
+            eventChannels.SessionNetworkHelper.SessionInitiationRequested += InitiateNetworkSession;
         }
 
         private void UnsubscribeFromEvents()
         {
-            applicationStateManager.EventChannels.ApplicationState.SetupSceneLoaded -= ProcessCommandLineArgs;
+            eventChannels.SessionNetworkHelper.SessionInitiationRequested -= InitiateNetworkSession;
         }
 
         private void Setup()
         {
             _networkManager = NetworkManager.singleton;
-
-            if (!Application.isEditor)
-            {
-                GetCommandLineArgs();
-            }
-            else
-            {
-                _isHost = true;
-                _username = "editorUser";
-            }
-            
-            Debug.Log("SessionNetworkVariable: " + "_isHost " + _isHost + " Username: " + _username);
         }
 
         /// <summary>
@@ -67,7 +58,15 @@ namespace SS3D.Core.Networking
         /// </summary>
         private void GetCommandLineArgs()
         {
-            _commandLineArgs = System.Environment.GetCommandLineArgs().ToList();
+            try
+            {
+                _commandLineArgs = System.Environment.GetCommandLineArgs().ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("GetCommandLineArgs: " + e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -75,46 +74,52 @@ namespace SS3D.Core.Networking
         /// </summary>
         public void ProcessCommandLineArgs()
         {
-            try
+            if (Application.isEditor)
             {
+                _isHost = !applicationStateManager.TestingClientInEditor;
+                _ckey = "editorUser";
+            }
+            else
+            {
+                GetCommandLineArgs();
                 foreach (string arg in _commandLineArgs)
                 {
-                    switch (arg)
+                    string value = arg;
+
+                    if (value.Contains(CommandLineArgs.Host))
                     {
-                        case CommandLineArgs.Host:
-                            _isHost = (_commandLineArgs[_commandLineArgs.IndexOf(arg) + 1][0] == '1');
-                            break;
-                        case CommandLineArgs.Ip:
-                            _ip = _commandLineArgs[_commandLineArgs.IndexOf(arg) + 1];
-                            break;
-                        case CommandLineArgs.Username:
-                            _username = _commandLineArgs[_commandLineArgs.IndexOf(arg) + 1];
-                            break;
-                        default:
-                            break;
+                        _isHost = true;
+                    }
+                    
+                    if (value.Contains(CommandLineArgs.Ip))
+                    {
+                        _ip = value.Replace(CommandLineArgs.Ip, "");
+                    }
+
+                    if (value.Contains(CommandLineArgs.Ckey))
+                    {
+                        _ckey = value.Replace(CommandLineArgs.Ckey, "");
                     }
                 }
-                
-                InitiateNetworkSession();
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+            LocalPlayerAccountManager.UpdateCkey(_ckey);
+            Debug.Log("SessionNetworkVariable { " + "Is Host: " + _isHost + " Ckey: " + _ckey + "}");
+            InitiateNetworkSession();
         }
 
         /// <summary>
         /// Uses the processed args to proceed with game initialization
         /// </summary>
         private void InitiateNetworkSession()
-        {
+        { 
+            Debug.Log("Initiating network session: hosting=" + _isHost + ", IP Address= " + _ip + ", CKEY: " + _ckey);
             if (_isHost)
             {
                 _networkManager.StartHost();
             }
 
-            if (_ip != string.Empty)
+            else
             {
                 _networkManager.StartClient(UriParser.TryParseIpAddress(_ip));
             }
