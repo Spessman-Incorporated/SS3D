@@ -31,21 +31,28 @@ MonoBehaviour:
     - com.johannesmp.unityscenereference
     m_IsDefault: 0
     m_Capabilities: 0
-  m_UserSelectedRegistryName: package.openupm.com
+  - m_Id: scoped:com.coimbrastudios.core
+    m_Name: com.coimbrastudios.core
+    m_Url: https://package.openupm.com
+    m_Scopes:
+    - com.coimbrastudios.core
+    m_IsDefault: 0
+    m_Capabilities: 0
+  m_UserSelectedRegistryName: com.coimbrastudios.core
   m_UserAddingNewScopedRegistry: 0
   m_RegistryInfoDraft:
     m_ErrorMessage: 
     m_Original:
-      m_Id: scoped:package.openupm.com
-      m_Name: package.openupm.com
+      m_Id: scoped:com.coimbrastudios.core
+      m_Name: com.coimbrastudios.core
       m_Url: https://package.openupm.com
       m_Scopes:
-      - com.johannesmp.unityscenereference
+      - com.coimbrastudios.core
       m_IsDefault: 0
       m_Capabilities: 0
     m_Modified: 0
-    m_Name: package.openupm.com
+    m_Name: com.coimbrastudios.core
     m_Url: https://package.openupm.com
     m_Scopes:
-    - com.johannesmp.unityscenereference
+    - com.coimbrastudios.core
     m_SelectedScopeIndex: 0

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.coimbrastudios.core": "1.0.0",
     "com.johannesmp.unityscenereference": "1.1.1",
     "com.unity.collab-proxy": "1.15.4",
     "com.unity.ide.rider": "2.0.7",
@@ -8,6 +9,7 @@
     "com.unity.test-framework": "1.1.29",
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.4.8",
+    "com.unity.toolchain.linux-x86_64": "1.0.0",
     "com.unity.ugui": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
@@ -47,6 +49,13 @@
       "url": "https://package.openupm.com",
       "scopes": [
         "com.johannesmp.unityscenereference"
+      ]
+    },
+    {
+      "name": "com.coimbrastudios.core",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.coimbrastudios.core"
       ]
     }
   ]
