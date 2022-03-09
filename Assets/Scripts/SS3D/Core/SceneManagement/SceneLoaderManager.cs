@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Coimbra;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,9 @@ namespace SS3D.Core.SceneManagement
     public class SceneLoaderManager : MonoBehaviour
     { 
         [SerializeField] private ApplicationStateManager applicationStateManager;
+        
+        public event Action<SceneReference, LoadSceneMode> SceneLoadRequested;
+        public event Action<SceneReference> SceneLoadCompleted;
 
         private void Awake()
         {
@@ -19,7 +23,7 @@ namespace SS3D.Core.SceneManagement
 
         private void SubscribeToEvents()
         {
-            applicationStateManager.EventChannels.SceneLoader.SceneLoadRequested += LoadScene;
+            SceneLoadRequested += LoadScene;
         }
         
         /// <summary>
@@ -58,7 +62,9 @@ namespace SS3D.Core.SceneManagement
             AsyncOperation operation = (SceneManager.LoadSceneAsync(scene, loadSceneMode));
             
             yield return new WaitUntil( () => operation.isDone);
-            applicationStateManager.EventChannels.SceneLoader.InvokeSceneLoadCompleted(scene);
+
+            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
+            eventService!.Invoke(SceneLoadCompleted, scene);
             
             SceneManager.SetActiveScene(SceneManager.GetSceneByPath(scene.ScenePath));
         }

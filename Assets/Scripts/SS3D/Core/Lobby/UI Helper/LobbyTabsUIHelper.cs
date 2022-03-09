@@ -1,4 +1,5 @@
 using System;
+using SS3D.Core.Lobby.UI;
 using UnityEngine;
 
 namespace SS3D.Core.Lobby.UI_Helper
@@ -6,8 +7,6 @@ namespace SS3D.Core.Lobby.UI_Helper
     public class LobbyTabsUIHelper : MonoBehaviour
     {
         [SerializeField] private GenericTabUI[] _categoryUi;
-
-        
         
         private void Start()
         {
@@ -15,9 +14,7 @@ namespace SS3D.Core.Lobby.UI_Helper
             SetupGenericsTabs();
             OnTabButtonClicked(0);
         }
-
         
-
         private void SetupGenericsTabs()
         {
             for (int i = 0; i < _categoryUi.Length; i++)

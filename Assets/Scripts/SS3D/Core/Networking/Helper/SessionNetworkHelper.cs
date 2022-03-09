@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
-using SS3D.Core.EventChannel;
+using SS3D.Core.Networking.Utils;
 using UnityEngine;
 using UriParser = SS3D.Utils.UriParser;
 
-namespace SS3D.Core.Networking
+namespace SS3D.Core.Networking.Helper
 {
     /// <summary>
     /// Helps the NetworkManager to understand what we should do in this instance,
@@ -18,7 +18,6 @@ namespace SS3D.Core.Networking
         private NetworkManager _networkManager;
         private List<string> _commandLineArgs;
 
-        private EventChannels eventChannels => applicationStateManager.EventChannels;
 
         private bool _isHost;
         /// <summary>
@@ -30,24 +29,8 @@ namespace SS3D.Core.Networking
         private void Awake()
         {
             Setup();
-            SubscribeToEvents();
         }
-
-        private void OnDestroy()
-        {
-            UnsubscribeFromEvents();
-        }
-
-        private void SubscribeToEvents()
-        {
-            eventChannels.SessionNetworkHelper.SessionInitiationRequested += InitiateNetworkSession;
-        }
-
-        private void UnsubscribeFromEvents()
-        {
-            eventChannels.SessionNetworkHelper.SessionInitiationRequested -= InitiateNetworkSession;
-        }
-
+        
         private void Setup()
         {
             _networkManager = NetworkManager.singleton;

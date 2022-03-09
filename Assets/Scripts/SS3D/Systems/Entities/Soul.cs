@@ -1,5 +1,7 @@
 using System;
+using Coimbra;
 using Mirror;
+using SS3D.Core.Lobby;
 using SS3D.Core.Networking;
 using UnityEngine;
 
@@ -22,19 +24,7 @@ namespace SS3D.Systems.Entities
             base.OnStartLocalPlayer();
             // Sends the command to update the ckey on the server
             CmdUpdateCkey(LocalPlayerAccountManager.Ckey);
-        }
-
-        public override void OnStartClient()
-        {
-            base.OnStartClient();
-            CmdSyncCkey();
-        }
-
-        [Command(requiresAuthority = false)]
-        public void CmdSyncCkey(NetworkConnectionToClient sender = null)
-        {
-            SetCkey(_ckey, _ckey);
-            gameObject.name = "Soul: " + _ckey;
+            ServiceLocator.Shared.Get<ILobbyService>()!.InvokePlayerJoinedLobby(LocalPlayerAccountManager.Ckey);
         }
         
         /// <summary>
@@ -43,26 +33,17 @@ namespace SS3D.Systems.Entities
         [Command(requiresAuthority = false)]
         public void CmdUpdateCkey(string ckey, NetworkConnectionToClient sender = null)
         {
-            _ckey = ckey;
-            Debug.Log("CmdUpdateCkey: " +_ckey);
+            SetCkey(_ckey, ckey);
             gameObject.name = "Soul: " + ckey;
-            RpcUpdateKey(gameObject.name);
-        }
-
-        [ClientRpc]
-        public void RpcUpdateKey(string gameObjectName)
-        {
-            gameObject.name = gameObjectName;
         }
         
-
         /// <summary>
         /// Used by Mirror Networking to update the variable and sync it across instances.
         /// </summary>
         private void SetCkey(string oldCkey, string newCkey)
         {
-            _ckey = newCkey;
-            Debug.Log("UpdateCkey: " + newCkey);
+            _ckey = newCkey; 
+            gameObject.name = "Soul: " + _ckey;
         }
     }
 }

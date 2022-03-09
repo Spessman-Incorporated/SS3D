@@ -1,6 +1,7 @@
 using System;
-using SS3D.Core.EventChannel;
+using DG.Tweening;
 using SS3D.Core.Networking;
+using SS3D.Core.Networking.Helper;
 using SS3D.Core.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,15 +19,12 @@ namespace SS3D.Core
         [SerializeField] private Scenes scenes;
         
         [Header("Managers")]
-        [SerializeField] private EventChannels eventChannels;
         [SerializeField] private SessionNetworkHelper networkHelper;
 
         [Header("Test Cases")]
         [SerializeField] private bool testingClientInEditor;
 
         public bool TestingClientInEditor => testingClientInEditor;
-        
-        public EventChannels EventChannels => eventChannels;
 
         private void Awake()
         {
@@ -38,6 +36,7 @@ namespace SS3D.Core
 
         private void Start()
         {
+            DOTween.Init();
             networkHelper.ProcessCommandLineArgs();
         }
     }
