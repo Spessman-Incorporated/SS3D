@@ -19,7 +19,7 @@ namespace SS3D.Core.Lobby
 
         private void Start()
         {
-            CmdSyncLobbyPlayers();
+            SyncLobbyPlayers();
         }
 
         public struct PlayerJoinedLobby
@@ -42,26 +42,23 @@ namespace SS3D.Core.Lobby
             }
         }
 
-
-        [Command(requiresAuthority = false)]
-        public void CmdSyncLobbyPlayers()
+        /// <summary>
+        /// Updates the lobby players on Start
+        /// </summary>
+        public void SyncLobbyPlayers()
         {
             foreach (string player in _players)
             {
-                RpcSyncLobbyPlayer(player);
+                IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
+                PlayerJoinedLobby playerJoinedLobby = new PlayerJoinedLobby(player);
+                eventService!.Invoke(null, playerJoinedLobby);   
             }
         }
-
-        [ClientRpc]
-        public void RpcSyncLobbyPlayer(string player)
-        {
-            if (isServer) return; 
-            
-            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
-            PlayerJoinedLobby playerJoinedLobby = new PlayerJoinedLobby(player);
-            eventService!.Invoke(null, playerJoinedLobby);    
-        }
         
+        /// <summary>
+        /// A network command that invokes the PlayerJoinedLobby event on the host and client
+        /// </summary>
+        /// <param name="username"></param>
         [Command(requiresAuthority = false)]
         public void CmdInvokePlayerJoinedLobby(string username)
         {
@@ -74,6 +71,9 @@ namespace SS3D.Core.Lobby
             RpcInvokePlayerJoinedLobby(username);
         }
 
+        /// <summary>
+        /// RPC call that calls the PlayerJoinedLobby event
+        /// </summary>
         [ClientRpc]
         public void RpcInvokePlayerJoinedLobby(string username)
         { 
@@ -86,6 +86,9 @@ namespace SS3D.Core.Lobby
             eventService!.Invoke(null, playerJoinedLobby);
         }
 
+        /// <summary>
+        /// Interface-implemented event to be able to call this from anywhere
+        /// </summary>
         [Client]
         public void InvokePlayerJoinedLobby(string username)
         {
@@ -93,10 +96,11 @@ namespace SS3D.Core.Lobby
         }
     }
 
+    /// <summary>
+    /// Interface used to work with the ServiceLocator
+    /// </summary>
     public interface ILobbyService
     {
         void InvokePlayerJoinedLobby(string username);
-
     }
-    
 }

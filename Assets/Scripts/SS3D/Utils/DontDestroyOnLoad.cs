@@ -1,15 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Makes objects persist throughout the scenes
-/// </summary>
-public class DontDestroyOnLoad : MonoBehaviour
+namespace SS3D.Utils
 {
-    private void Awake()
+    /// <summary>
+    /// Makes objects persist throughout the scenes
+    /// </summary>
+    public class DontDestroyOnLoad : MonoBehaviour
     {
-        DontDestroyOnLoad(gameObject);
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
     }
 }

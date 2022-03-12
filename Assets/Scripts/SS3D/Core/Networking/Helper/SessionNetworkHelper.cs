@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Coimbra;
 using Mirror;
+using SS3D.Core.Networking.UI_Helper;
 using SS3D.Core.Networking.Utils;
 using UnityEngine;
 using UriParser = SS3D.Utils.UriParser;
@@ -16,13 +18,13 @@ namespace SS3D.Core.Networking.Helper
     {
         [SerializeField] private ApplicationStateManager applicationStateManager; 
         private NetworkManager _networkManager;
-        private List<string> _commandLineArgs;
-
-
-        private bool _isHost;
+        
         /// <summary>
-        /// SS3D server IP address
+        /// The command line arguments read by the GetCommandLineArgs
         /// </summary>
+        private List<string> _commandLineArgs;
+        
+        private bool _isHost;
         private string _ip;
         private string _ckey;
         
@@ -31,8 +33,15 @@ namespace SS3D.Core.Networking.Helper
             Setup();
         }
         
+        /// <summary>
+        /// Generic method that prepared the class on Start or Awake
+        /// </summary>
         private void Setup()
         {
+            // Uses the event service to listen to lobby events
+            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
+            eventService.AddListener<ServerConnectionUIHelper.RetryButtonClicked>(InitiateNetworkSession);
+            
             _networkManager = NetworkManager.singleton;
         }
 
@@ -43,7 +52,7 @@ namespace SS3D.Core.Networking.Helper
         {
             try
             {
-                _commandLineArgs = System.Environment.GetCommandLineArgs().ToList();
+                _commandLineArgs = Environment.GetCommandLineArgs().ToList();
             }
             catch (Exception e)
             {
@@ -54,6 +63,8 @@ namespace SS3D.Core.Networking.Helper
 
         /// <summary>
         /// Uses the args to determine if we have to connect or host, etc
+        ///
+        /// TODO: Probably use a library for this, maybe convert to some kind of JSON Dictionary
         /// </summary>
         public void ProcessCommandLineArgs()
         {
@@ -92,10 +103,13 @@ namespace SS3D.Core.Networking.Helper
         }
 
         /// <summary>
-        /// Uses the processed args to proceed with game initialization
+        /// Uses the processed args to proceed with game network initialization
         /// </summary>
-        private void InitiateNetworkSession()
-        { 
+        public void InitiateNetworkSession()
+        {
+            if (_networkManager == null)
+                _networkManager = NetworkManager.singleton;
+
             Debug.Log("Initiating network session: hosting=" + _isHost + ", IP Address= " + _ip + ", CKEY: " + _ckey);
             if (_isHost)
             {
@@ -106,6 +120,11 @@ namespace SS3D.Core.Networking.Helper
             {
                 _networkManager.StartClient(UriParser.TryParseIpAddress(_ip));
             }
+        }
+        
+        private void InitiateNetworkSession(object sender, ServerConnectionUIHelper.RetryButtonClicked e)
+        {
+            InitiateNetworkSession();
         }
     }
 }

@@ -3,6 +3,9 @@ using System.Net;
 
 namespace SS3D.Utils
 {
+    /// <summary>
+    /// Process an IP from string to Uri
+    /// </summary>
     public static class UriParser
     {
         /// <summary>

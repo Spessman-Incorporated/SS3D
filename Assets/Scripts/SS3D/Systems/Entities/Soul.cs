@@ -15,13 +15,14 @@ namespace SS3D.Systems.Entities
         [SyncVar(hook = nameof(SetCkey))] private string _ckey;
 
         /// <summary>
-        /// Unique client key, originally used in BYOND's user management
+        /// Unique client key, originally used in BYOND's user management, nostalgically used
         /// </summary>
         public string Ckey => _ckey;
 
         public override void OnStartLocalPlayer()
         {
             base.OnStartLocalPlayer();
+            
             // Sends the command to update the ckey on the server
             CmdUpdateCkey(LocalPlayerAccountManager.Ckey);
             ServiceLocator.Shared.Get<ILobbyService>()!.InvokePlayerJoinedLobby(LocalPlayerAccountManager.Ckey);
@@ -39,6 +40,8 @@ namespace SS3D.Systems.Entities
         
         /// <summary>
         /// Used by Mirror Networking to update the variable and sync it across instances.
+        /// 
+        /// This is also called by the server when the client enters the server to update his data
         /// </summary>
         private void SetCkey(string oldCkey, string newCkey)
         {

@@ -1,3 +1,16 @@
 {
-	"name": "SS3D.Utils"
+    "name": "SS3D.Utils",
+    "rootNamespace": "",
+    "references": [
+        "DOTween.Modules"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

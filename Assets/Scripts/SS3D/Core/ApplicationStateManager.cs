@@ -9,7 +9,8 @@ using UnityEngine.SceneManagement;
 namespace SS3D.Core
 {
     /// <summary>
-    /// Responsible for controlling the game state, persistent throughout the instance
+    /// Responsible for controlling the game state, persistent throughout the application
+    /// Should hopefully be the only singleton in the project
     /// </summary>
     public class ApplicationStateManager : MonoBehaviour
     {

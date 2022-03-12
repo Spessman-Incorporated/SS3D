@@ -19,6 +19,7 @@ namespace kcp2k
         public Action OnAuthenticated;
         public Action<ArraySegment<byte>, KcpChannel> OnData;
         public Action OnDisconnected;
+        public static Action ConnectionFailed;
 
         // If we don't receive anything these many milliseconds
         // then consider us disconnected
@@ -166,6 +167,7 @@ namespace kcp2k
             //       only ever happen if the connection is truly gone.
             if (time >= lastReceiveTime + timeout)
             {
+                ConnectionFailed?.Invoke();
                 Log.Warning($"KCP: Connection timed out after not receiving any message for {timeout}ms. Disconnecting.");
                 Disconnect();
             }
