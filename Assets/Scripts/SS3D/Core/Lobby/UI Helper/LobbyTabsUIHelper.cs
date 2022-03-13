@@ -26,7 +26,6 @@ namespace SS3D.Core.Lobby.UI_Helper
 
         private void OnTabButtonClicked(int index)
         {
-            Debug.Log(index);
             foreach (GenericTabUI tab in _categoryUi)
             {
                 tab.UpdateCategoryState(tab == _categoryUi[index]);

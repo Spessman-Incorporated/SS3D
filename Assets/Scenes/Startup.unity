@@ -704,7 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scenes: {fileID: 11400000, guid: 4fb3c3d510918a2438cfc8a4deba786c, type: 2}
   networkHelper: {fileID: 1628220427}
-  testingClientInEditor: 1
+  testingClientInEditor: 0
 --- !u!1 &1628220425
 GameObject:
   m_ObjectHideFlags: 0

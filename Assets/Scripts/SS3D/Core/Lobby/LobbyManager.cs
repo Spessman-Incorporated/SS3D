@@ -51,7 +51,7 @@ namespace SS3D.Core.Lobby
             {
                 IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
                 PlayerJoinedLobby playerJoinedLobby = new PlayerJoinedLobby(player);
-                eventService!.Invoke(null, playerJoinedLobby);   
+                eventService!.Invoke(null, playerJoinedLobby);
             }
         }
         
@@ -90,7 +90,7 @@ namespace SS3D.Core.Lobby
         /// Interface-implemented event to be able to call this from anywhere
         /// </summary>
         [Client]
-        public void InvokePlayerJoinedLobby(string username)
+        public void InvokePlayerJoinedServer(string username)
         {
             CmdInvokePlayerJoinedLobby(username);
         }
@@ -101,6 +101,6 @@ namespace SS3D.Core.Lobby
     /// </summary>
     public interface ILobbyService
     {
-        void InvokePlayerJoinedLobby(string username);
+        void InvokePlayerJoinedServer(string username);
     }
 }

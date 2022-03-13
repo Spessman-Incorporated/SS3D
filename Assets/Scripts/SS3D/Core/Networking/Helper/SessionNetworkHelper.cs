@@ -98,7 +98,6 @@ namespace SS3D.Core.Networking.Helper
             }
 
             LocalPlayerAccountManager.UpdateCkey(_ckey);
-            Debug.Log("SessionNetworkVariable { " + "Is Host: " + _isHost + " Ckey: " + _ckey + "}");
             InitiateNetworkSession();
         }
 
@@ -110,7 +109,6 @@ namespace SS3D.Core.Networking.Helper
             if (_networkManager == null)
                 _networkManager = NetworkManager.singleton;
 
-            Debug.Log("Initiating network session: hosting=" + _isHost + ", IP Address= " + _ip + ", CKEY: " + _ckey);
             if (_isHost)
             {
                 _networkManager.StartHost();
