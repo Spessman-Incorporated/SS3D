@@ -18,6 +18,22 @@ namespace SS3D.Core
             public UpdateCkeyRequested(Soul soul, string newCkey) { this.soul = soul; this.ckey = newCkey; }
         }
 
+        [Serializable]
+        public struct PlayerJoinedServer
+        {
+            public Soul soul;
+            
+            public PlayerJoinedServer(Soul soul) { this.soul = soul; }
+        }
+
+        [Serializable]
+        public struct PlayerLeftServer
+        {
+            public Soul soul;
+
+            public PlayerLeftServer(Soul soul) { this.soul = soul; }
+        }
+
         private void Awake()
         { 
             ServiceLocator.Shared.Set<IPlayerControlManagerService>(this);
@@ -35,7 +51,25 @@ namespace SS3D.Core
         {
             Soul soul = updateCkeyRequested.soul;
             soul.CmdUpdateCkey(updateCkeyRequested.ckey);
-            ServiceLocator.Shared.Get<ILobbyService>()!.InvokePlayerJoinedServer(updateCkeyRequested.ckey);
+            InvokePlayerJoinedServer(soul);
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdInvokePlayerLeftServer(Soul soul)
+        {
+            PlayerLeftServer playerLeftServer = new PlayerLeftServer(soul);
+
+            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
+            eventService?.Invoke(this, playerLeftServer);
+        }
+        
+        [Command(requiresAuthority = false)]
+        public void CmdInvokePlayerJoinedServer(Soul soul)
+        {
+            PlayerJoinedServer playerJoinedServer = new PlayerJoinedServer(soul);
+            
+            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
+            eventService?.Invoke(this, playerJoinedServer);
         }
         
         public void InvokeUpdateCkeyRequested(Soul soul, string newCkey)
@@ -45,10 +79,23 @@ namespace SS3D.Core
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             eventService?.Invoke(this, updateCkeyRequested);
         }
+
+        public void InvokePlayerJoinedServer(Soul soul)
+        {
+            CmdInvokePlayerJoinedServer(soul);
+        }
+        
+        public void InvokePlayerLeftServer(Soul soul)
+        {
+            CmdInvokePlayerLeftServer(soul);
+        }
     }
 
     public interface IPlayerControlManagerService
     {
         void InvokeUpdateCkeyRequested(Soul soul, string newCkey);
+        
+        void InvokePlayerJoinedServer(Soul soul);
+        void InvokePlayerLeftServer(Soul soul);
     }
 }

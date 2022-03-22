@@ -8,18 +8,26 @@ using EventService = Coimbra.Services.EventService;
 
 namespace SS3D.Core.Lobby
 {
-    public class LobbyManager : NetworkBehaviour, ILobbyService
+    public class LobbyManager : NetworkBehaviour
     {
         private readonly SyncList<string> _players = new SyncList<string>();
 
         private void Awake()
-        { 
-            ServiceLocator.Shared.Set<ILobbyService>(this);
+        {
+            SubscribeToEvents();
         }
 
         private void Start()
         {
             SyncLobbyPlayers();
+        }
+
+        private void SubscribeToEvents()
+        {
+            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
+            
+            eventService?.AddListener<PlayerControlManager.PlayerJoinedServer>(CmdInvokePlayerJoinedLobby);
+            eventService?.AddListener<PlayerControlManager.PlayerLeftServer>(CmdInvokePlayerLeftLobby);
         }
 
         public struct PlayerJoinedLobby
@@ -60,12 +68,13 @@ namespace SS3D.Core.Lobby
         /// </summary>
         /// <param name="username"></param>
         [Command(requiresAuthority = false)]
-        public void CmdInvokePlayerJoinedLobby(string username)
+        public void CmdInvokePlayerJoinedLobby(object sender, PlayerControlManager.PlayerJoinedServer playerJoinedServer)
         {
+            string username = playerJoinedServer.soul.Ckey;
+            
             PlayerJoinedLobby playerJoinedLobby = new PlayerJoinedLobby(username);
             _players.Add(username);
             
-            Debug.Log("CMD playerJoinedLobby " + username);
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             eventService!.Invoke(null, playerJoinedLobby);
             RpcInvokePlayerJoinedLobby(username);
@@ -82,25 +91,32 @@ namespace SS3D.Core.Lobby
             PlayerJoinedLobby playerJoinedLobby = new PlayerJoinedLobby(username);
             
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
-            Debug.Log("RPC playerJoinedLobby " + playerJoinedLobby.username);
             eventService!.Invoke(null, playerJoinedLobby);
         }
 
-        /// <summary>
-        /// Interface-implemented event to be able to call this from anywhere
-        /// </summary>
-        [Client]
-        public void InvokePlayerJoinedServer(string username)
+        [Command(requiresAuthority = false)]
+        public void CmdInvokePlayerLeftLobby(object sender, PlayerControlManager.PlayerLeftServer playerLeftServer)
         {
-            CmdInvokePlayerJoinedLobby(username);
+            string username = playerLeftServer.soul.Ckey;
+            
+            PlayerDisconnectedFromLobby playerDisconnectedFromLobby = new PlayerDisconnectedFromLobby(username);
+            _players.Remove(username);
+            
+            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
+            eventService!.Invoke(null, playerDisconnectedFromLobby);
+            RpcInvokePlayerLeftLobby(username);
         }
-    }
 
-    /// <summary>
-    /// Interface used to work with the ServiceLocator
-    /// </summary>
-    public interface ILobbyService
-    {
-        void InvokePlayerJoinedServer(string username);
+
+        [ClientRpc]
+        public void RpcInvokePlayerLeftLobby(string username)
+        {
+            if (isServer) return;
+            
+            PlayerDisconnectedFromLobby playerDisconnectedFromLobby = new PlayerDisconnectedFromLobby(username);
+            
+            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
+            eventService!.Invoke(null, playerDisconnectedFromLobby);
+        }
     }
 }
