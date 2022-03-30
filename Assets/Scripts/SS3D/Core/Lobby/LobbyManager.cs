@@ -32,21 +32,21 @@ namespace SS3D.Core.Lobby
 
         public struct PlayerJoinedLobby
         {
-            public string username;
+            public readonly string Username;
 
             public PlayerJoinedLobby(string username)
             {
-                this.username = username;
+                Username = username;
             }
         }
 
         public struct PlayerDisconnectedFromLobby
         {
-            public string username;
+            public readonly string Username;
 
             public PlayerDisconnectedFromLobby(string username)
             {
-                this.username = username;
+                Username = username;
             }
         }
 
@@ -70,6 +70,7 @@ namespace SS3D.Core.Lobby
         [Command(requiresAuthority = false)]
         public void CmdInvokePlayerJoinedLobby(object sender, PlayerControlManager.PlayerJoinedServer playerJoinedServer)
         {
+            Debug.Log("Cmd player joined lobby");
             string username = playerJoinedServer.soul.Ckey;
             
             PlayerJoinedLobby playerJoinedLobby = new PlayerJoinedLobby(username);
@@ -87,6 +88,7 @@ namespace SS3D.Core.Lobby
         public void RpcInvokePlayerJoinedLobby(string username)
         { 
             if (isServer) return;
+            Debug.Log("Rpc player joined lobby");
             
             PlayerJoinedLobby playerJoinedLobby = new PlayerJoinedLobby(username);
             
@@ -97,6 +99,7 @@ namespace SS3D.Core.Lobby
         [Command(requiresAuthority = false)]
         public void CmdInvokePlayerLeftLobby(object sender, PlayerControlManager.PlayerLeftServer playerLeftServer)
         {
+            Debug.Log("Cmd player left lobby");
             string username = playerLeftServer.soul.Ckey;
             
             PlayerDisconnectedFromLobby playerDisconnectedFromLobby = new PlayerDisconnectedFromLobby(username);
@@ -111,6 +114,7 @@ namespace SS3D.Core.Lobby
         [ClientRpc]
         public void RpcInvokePlayerLeftLobby(string username)
         {
+            Debug.Log("Rpc player left lobby");
             if (isServer) return;
             
             PlayerDisconnectedFromLobby playerDisconnectedFromLobby = new PlayerDisconnectedFromLobby(username);

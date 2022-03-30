@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SS3D.Core.Lobby.UI
 {
     /// <summary>
-    /// Simple username ui element controller
+    /// Simple Username ui element controller
     /// </summary>
     public class PlayerUsernameUI : MonoBehaviour
     {

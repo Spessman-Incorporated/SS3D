@@ -57,6 +57,7 @@ namespace SS3D.Core
         [Command(requiresAuthority = false)]
         public void CmdInvokePlayerLeftServer(Soul soul)
         {
+            Debug.Log("player control left server");
             PlayerLeftServer playerLeftServer = new PlayerLeftServer(soul);
 
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
@@ -66,6 +67,7 @@ namespace SS3D.Core
         [Command(requiresAuthority = false)]
         public void CmdInvokePlayerJoinedServer(Soul soul)
         {
+            Debug.Log("player control joined server");
             PlayerJoinedServer playerJoinedServer = new PlayerJoinedServer(soul);
             
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();

@@ -26,10 +26,9 @@ namespace SS3D.Systems.Entities
             base.OnStartLocalPlayer();
             
             // Sends the command to update the ckey on the server
-            //CmdUpdateCkey(LocalPlayerAccountManager.Ckey);
             ServiceLocator.Shared.Get<IPlayerControlManagerService>()?.InvokeUpdateCkeyRequested(this, LocalPlayerAccountManager.Ckey);
         }
-        
+
         /// <summary>
         /// Uses a network command to update the ckey
         /// </summary>

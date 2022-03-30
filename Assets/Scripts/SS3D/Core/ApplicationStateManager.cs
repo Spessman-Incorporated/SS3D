@@ -33,10 +33,6 @@ namespace SS3D.Core
             {
                 Instance = this;
             }
-        }
-
-        private void Start()
-        {
             DOTween.Init();
             networkHelper.ProcessCommandLineArgs();
         }

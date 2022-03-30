@@ -21,7 +21,7 @@ namespace SS3D.Core.Lobby.UI
         /// </summary>
         [SerializeField] private List<PlayerUsernameUI> _playerUsernames;
         /// <summary>
-        /// The username panel prefab
+        /// The Username panel prefab
         /// </summary>
         [SerializeField] private GameObject _uiPrefab;
 
@@ -43,14 +43,14 @@ namespace SS3D.Core.Lobby.UI
         }
 
         /// <summary>
-        /// Adds the new username to the player list
+        /// Adds the new Username to the player list
         /// </summary>
         /// <param name="sender">Required by the ServiceLocator, unused in this function</param>
-        /// <param name="data">A PlayerJoinedlobby event, that simply carries the username</param>
+        /// <param name="data">A PlayerJoinedlobby event, that simply carries the Username</param>
         public void AddUsernameUI(object sender, LobbyManager.PlayerJoinedLobby data)
         {
-            // if this username already exists we return
-            if (_playerUsernames.Exists((player) => data.username == player.Name))
+            // if this Username already exists we return
+            if (_playerUsernames.Exists((player) => data.Username == player.Name))
             {
                 return;
             }
@@ -59,21 +59,26 @@ namespace SS3D.Core.Lobby.UI
             GameObject uiInstance = Instantiate(_uiPrefab, _root);
 
             PlayerUsernameUI playerUsernameUI = uiInstance.GetComponent<PlayerUsernameUI>();
-            playerUsernameUI.UpdateNameText(data.username);
+            playerUsernameUI.UpdateNameText(data.Username);
             _playerUsernames.Add(playerUsernameUI);
         }
         
         /// <summary>
-        /// Removes the player from the list based on the username
+        /// Removes the player from the list based on the Username
         /// </summary>
         /// <param name="sender">Required by the ServiceLocator, unused in this function</param>
-        /// <param name="data">A PlayerJoinedlobby event, that simply carries the username</param>
+        /// <param name="data">A PlayerJoinedlobby event, that simply carries the Username</param>
         private void RemoveUsernameUI(object sender, LobbyManager.PlayerDisconnectedFromLobby data)
         {
-            foreach (PlayerUsernameUI playerUsernameUI in _playerUsernames.Where(playerUsernameUI => playerUsernameUI.Name.Equals(data.username)))
+            PlayerUsernameUI removedUsername = null;
+            foreach (PlayerUsernameUI playerUsernameUI in _playerUsernames.Where(playerUsernameUI => playerUsernameUI.Name.Equals(data.Username)))
             {
-                _playerUsernames.Remove(playerUsernameUI);
+                removedUsername = playerUsernameUI;
+                Destroy(playerUsernameUI.gameObject);
             }
+
+            _playerUsernames.Remove(removedUsername);
+            Destroy(removedUsername != null ? removedUsername.gameObject : null);
         }
     }
 }

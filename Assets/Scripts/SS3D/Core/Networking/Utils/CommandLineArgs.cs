@@ -17,7 +17,7 @@ namespace SS3D.Core.Networking.Utils
         /// String.
         /// This is temporary, in production use, this will not exist,
         /// and be replaced by the token, and then the server will get the
-        /// username.
+        /// Username.
         /// </summary>
         public const string Ckey = "-ckey=";
         /// <summary>
