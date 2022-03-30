@@ -13,4 +13,8 @@ assignees: ''
 
 ## Important details
 
+## Acceptance criteria
+
 ## Other
+
+## Related Issues
