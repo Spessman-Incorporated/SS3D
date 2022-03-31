@@ -10,7 +10,7 @@ namespace SS3D.Core.Lobby.UI
     /// <summary>
     /// Controls the player list in the lobby
     /// </summary>
-    public class PlayerUsernameListUIHelper : MonoBehaviour
+    public sealed class PlayerUsernameListUIHelper : MonoBehaviour
     {
         /// <summary>
         /// The UI element this is linked to

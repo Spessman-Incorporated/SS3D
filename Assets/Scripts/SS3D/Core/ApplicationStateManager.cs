@@ -12,7 +12,7 @@ namespace SS3D.Core
     /// Responsible for controlling the game state, persistent throughout the application
     /// Should hopefully be the only singleton in the project
     /// </summary>
-    public class ApplicationStateManager : MonoBehaviour
+    public sealed class ApplicationStateManager : MonoBehaviour
     {
         public static ApplicationStateManager Instance;
         
@@ -29,10 +29,16 @@ namespace SS3D.Core
 
         private void Awake()
         {
+            Setup();
+        }
+
+        private void Setup()
+        {
             if (Instance == null)
             {
                 Instance = this;
             }
+
             DOTween.Init();
             networkHelper.ProcessCommandLineArgs();
         }

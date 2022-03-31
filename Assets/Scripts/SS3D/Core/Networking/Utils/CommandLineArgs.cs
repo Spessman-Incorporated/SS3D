@@ -19,7 +19,7 @@ namespace SS3D.Core.Networking.Utils
         /// and be replaced by the token, and then the server will get the
         /// Username.
         /// </summary>
-        public const string Ckey = "-ckey=";
+        public const string Ckey = "-Ckey=";
         /// <summary>
         /// String.
         /// in production this will be sent by the Hub to the client executable.

@@ -6,7 +6,7 @@ namespace SS3D.Core.Lobby.UI
     /// <summary>
     /// Generic class to manage a simple tab/panel UI
     /// </summary>
-    public class GenericTabUI : MonoBehaviour
+    public sealed class GenericTabUI : MonoBehaviour
     {
         [SerializeField] private bool _active;
         [SerializeField] private Transform _panelUI;

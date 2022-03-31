@@ -2,15 +2,34 @@ using System;
 using System.Collections.Generic;
 using Coimbra;
 using Mirror;
-using SS3D.Core.Lobby.UI;
+using SS3D.Core.PlayerControl;
 using UnityEngine;
-using EventService = Coimbra.Services.EventService;
 
 namespace SS3D.Core.Lobby
 {
-    public class LobbyManager : NetworkBehaviour
+    /// <summary>
+    /// Manages all networked lobby stuff
+    /// </summary>
+    public sealed class LobbyManager : NetworkBehaviour
     {
+        /// <summary>
+        /// Current lobby players
+        /// </summary>
         private readonly SyncList<string> _players = new SyncList<string>();
+
+        public struct PlayerJoinedLobby
+        {
+            public readonly string Username;
+
+            public PlayerJoinedLobby(string username) { Username = username; }
+        }
+
+        public struct PlayerDisconnectedFromLobby
+        {
+            public readonly string Username;
+
+            public PlayerDisconnectedFromLobby(string username) { Username = username; }
+        }
 
         private void Awake()
         {
@@ -28,26 +47,6 @@ namespace SS3D.Core.Lobby
             
             eventService?.AddListener<PlayerControlManager.PlayerJoinedServer>(CmdInvokePlayerJoinedLobby);
             eventService?.AddListener<PlayerControlManager.PlayerLeftServer>(CmdInvokePlayerLeftLobby);
-        }
-
-        public struct PlayerJoinedLobby
-        {
-            public readonly string Username;
-
-            public PlayerJoinedLobby(string username)
-            {
-                Username = username;
-            }
-        }
-
-        public struct PlayerDisconnectedFromLobby
-        {
-            public readonly string Username;
-
-            public PlayerDisconnectedFromLobby(string username)
-            {
-                Username = username;
-            }
         }
 
         /// <summary>
@@ -71,7 +70,7 @@ namespace SS3D.Core.Lobby
         public void CmdInvokePlayerJoinedLobby(object sender, PlayerControlManager.PlayerJoinedServer playerJoinedServer)
         {
             Debug.Log("Cmd player joined lobby");
-            string username = playerJoinedServer.soul.Ckey;
+            string username = playerJoinedServer.Soul.Ckey;
             
             PlayerJoinedLobby playerJoinedLobby = new PlayerJoinedLobby(username);
             _players.Add(username);
@@ -96,11 +95,16 @@ namespace SS3D.Core.Lobby
             eventService!.Invoke(null, playerJoinedLobby);
         }
 
+        /// <summary>
+        /// Called when a player disconnects from the server
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="playerLeftServer"></param>
         [Command(requiresAuthority = false)]
         public void CmdInvokePlayerLeftLobby(object sender, PlayerControlManager.PlayerLeftServer playerLeftServer)
         {
             Debug.Log("Cmd player left lobby");
-            string username = playerLeftServer.soul.Ckey;
+            string username = playerLeftServer.Soul.Ckey;
             
             PlayerDisconnectedFromLobby playerDisconnectedFromLobby = new PlayerDisconnectedFromLobby(username);
             _players.Remove(username);
@@ -111,6 +115,10 @@ namespace SS3D.Core.Lobby
         }
 
 
+        /// <summary>
+        /// RPC call when the player leaves the lobby
+        /// </summary>
+        /// <param name="username"></param>
         [ClientRpc]
         public void RpcInvokePlayerLeftLobby(string username)
         {

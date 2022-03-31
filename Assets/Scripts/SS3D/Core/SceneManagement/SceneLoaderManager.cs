@@ -9,7 +9,7 @@ namespace SS3D.Core.SceneManagement
     /// <summary>
     /// Persistent object that loads and unloads scenes
     /// </summary>
-    public class SceneLoaderManager : MonoBehaviour
+    public sealed class SceneLoaderManager : MonoBehaviour
     {
         /// <summary>
         /// Tries to load a scene

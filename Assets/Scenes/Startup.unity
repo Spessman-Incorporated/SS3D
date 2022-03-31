@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 54634137}
   - component: {fileID: 54634138}
   m_Layer: 0
-  m_Name: NetworkManager
+  m_Name: '| NetworkManager'
   m_TagString: Untagged
   m_Icon: {fileID: 2800000, guid: 7453abfe9e8b2c04a8a47eb536fe21eb, type: 3}
   m_NavMeshLayer: 0
@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 295953462}
   - component: {fileID: 295953463}
   m_Layer: 0
-  m_Name: '| Startup Persistent Managers'
+  m_Name: '| Persistent Startup Managers'
   m_TagString: Untagged
   m_Icon: {fileID: 2800000, guid: 274868c191eceec47af7c288217e75cd, type: 3}
   m_NavMeshLayer: 0
@@ -638,7 +638,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4722110630841134581, guid: c658ba6426888e2448d7c7f8e5df81fb, type: 3}
       propertyPath: m_Name
-      value: '| DiscordManager'
+      value: '| Discord Integration'
       objectReference: {fileID: 0}
     - target: {fileID: 4722110630841134587, guid: c658ba6426888e2448d7c7f8e5df81fb, type: 3}
       propertyPath: m_RootOrder
@@ -686,6 +686,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c658ba6426888e2448d7c7f8e5df81fb, type: 3}
+--- !u!1 &1425655009 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4722110630841134581, guid: c658ba6426888e2448d7c7f8e5df81fb, type: 3}
+  m_PrefabInstance: {fileID: 1425655008}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1425655010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425655009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 748528fe61fbac44bb380645d676726c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1498937504
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,7 +959,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1984359916}
   m_Layer: 0
-  m_Name: Essential
+  m_Name: '| Essential'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -7,13 +7,14 @@ namespace SS3D.Core.Networking
     /// </summary>
     public static class LocalPlayerAccountManager
     {
-        private static string _ckey;
-
-        public static string Ckey => _ckey;
+        /// <summary>
+        /// Unique client key, originally used in BYOND's user management, nostalgically used
+        /// </summary>
+        public static string Ckey { get; private set; }
 
         public static void UpdateCkey(string ckey)
         {
-            _ckey = ckey; 
+            Ckey = ckey; 
         }
 
     }

@@ -14,7 +14,7 @@ namespace SS3D.Core.Networking.Helper
     /// Helps the NetworkManager to understand what we should do in this instance,
     /// if we are a server, or a client, and process respective data.
     /// </summary>
-    public class SessionNetworkHelper : MonoBehaviour
+    public sealed class SessionNetworkHelper : MonoBehaviour
     {
         [SerializeField] private ApplicationStateManager applicationStateManager; 
         private NetworkManager _networkManager;
@@ -34,7 +34,7 @@ namespace SS3D.Core.Networking.Helper
         }
         
         /// <summary>
-        /// Generic method that prepared the class on Start or Awake
+        /// Generic method that prepares the class on Start or Awake
         /// </summary>
         private void Setup()
         {
@@ -63,8 +63,6 @@ namespace SS3D.Core.Networking.Helper
 
         /// <summary>
         /// Uses the args to determine if we have to connect or host, etc
-        ///
-        /// TODO: Probably use a library for this, maybe convert to some kind of JSON Dictionary
         /// </summary>
         public void ProcessCommandLineArgs()
         {
@@ -120,6 +118,11 @@ namespace SS3D.Core.Networking.Helper
             }
         }
         
+        /// <summary>
+        /// Overload to match the event type
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InitiateNetworkSession(object sender, ServerConnectionUIHelper.RetryButtonClicked e)
         {
             InitiateNetworkSession();

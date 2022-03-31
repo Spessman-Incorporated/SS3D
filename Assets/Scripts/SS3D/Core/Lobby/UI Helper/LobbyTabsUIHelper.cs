@@ -4,17 +4,19 @@ using UnityEngine;
 
 namespace SS3D.Core.Lobby.UI_Helper
 {
-    public class LobbyTabsUIHelper : MonoBehaviour
+    public sealed class LobbyTabsUIHelper : MonoBehaviour
     {
         [SerializeField] private GenericTabUI[] _categoryUi;
         
         private void Start()
         {
-            Destroy(this);
             SetupGenericsTabs();
             OnTabButtonClicked(0);
         }
         
+        /// <summary>
+        /// Sets up UI logic
+        /// </summary>
         private void SetupGenericsTabs()
         {
             for (int i = 0; i < _categoryUi.Length; i++)

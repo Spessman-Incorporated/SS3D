@@ -1,5 +1,8 @@
 namespace SS3D.Data.Messages
 {
+    /// <summary>
+    /// Should store all application messages
+    /// </summary>
     public static class ApplicationMessages
     {
         public static class Network

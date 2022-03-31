@@ -16,7 +16,7 @@ namespace SS3D.Core.Networking.UI_Helper
     /// <summary>
     /// Displays the process of connecting to a server on ui elements
     /// </summary>
-    public class ServerConnectionUIHelper : MonoBehaviour
+    public sealed class ServerConnectionUIHelper : MonoBehaviour
     {
         [SerializeField] private GameObject _root;
     

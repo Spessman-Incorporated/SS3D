@@ -1,18 +1,16 @@
 using System;
 using Coimbra;
 using Mirror;
-using SS3D.Core;
-using SS3D.Core.Lobby;
 using SS3D.Core.Networking;
-using UnityEngine;
+using SS3D.Core.PlayerControl;
 
-namespace SS3D.Systems.Entities
+namespace SS3D.Core.Systems.Entities
 {
     /// <summary>
     /// Unique, persistent object that the player owns, it manages what character it is controlling and stores other player data.
     /// </summary>
     [Serializable]
-    public class Soul : NetworkBehaviour
+    public sealed class Soul : NetworkBehaviour
     {
         [SyncVar(hook = nameof(SetCkey))] private string _ckey;
 
@@ -25,12 +23,12 @@ namespace SS3D.Systems.Entities
         {
             base.OnStartLocalPlayer();
             
-            // Sends the command to update the ckey on the server
+            // Sends the command to update the Ckey on the server
             ServiceLocator.Shared.Get<IPlayerControlManagerService>()?.InvokeUpdateCkeyRequested(this, LocalPlayerAccountManager.Ckey);
         }
 
         /// <summary>
-        /// Uses a network command to update the ckey
+        /// Uses a network command to update the Ckey
         /// </summary>
         [Command(requiresAuthority = false)]
         public void CmdUpdateCkey(string ckey, NetworkConnectionToClient sender = null)
