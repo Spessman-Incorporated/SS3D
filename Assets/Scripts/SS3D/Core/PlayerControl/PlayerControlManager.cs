@@ -53,7 +53,7 @@ namespace SS3D.Core.PlayerControl
         {
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             
-            eventService?.AddListener<AuthorizationRequested>(HandleAuthorizationRequested);
+            eventService?.AddListener<AuthorizationRequested>(HandleAuthorizePlayer);
         }
 
         /// <summary>
@@ -85,11 +85,25 @@ namespace SS3D.Core.PlayerControl
         }
 
         /// <summary>
+        /// Tries to connect back to the existing Soul or create a new one
+        /// </summary>
+        [Command(requiresAuthority = false)]
+        private void CmdInvokeAuthorizationRequested(string ckey, NetworkConnectionToClient sender = null)
+        {
+            Debug.Log("CmdInvokeAuthorizationRequested");
+
+            // sends the Ckey to validate and assign a Soul to this
+            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
+            AuthorizationRequested authorizationRequested = new AuthorizationRequested(ckey, sender);
+            eventService!.Invoke(this, authorizationRequested);
+        }
+
+        /// <summary>
         /// Used by the server to validate credentials and reassign souls to clients
         /// </summary>
         /// <param name="authorizationRequested">struct containing the ckey and the connection that sent it</param>
         [Server]
-        public void HandleAuthorizePlayer(AuthorizationRequested authorizationRequested)
+        public void HandleAuthorizePlayer(object sender, AuthorizationRequested authorizationRequested)
         {
             Debug.Log("Handle Authorize Player " + authorizationRequested.Ckey);
 
@@ -118,13 +132,11 @@ namespace SS3D.Core.PlayerControl
         }
 
         /// <summary>
-        /// Used when we want to validate an user's credentials (only using ckey for now)
+        /// Tries to connect back to the existing Soul or create a new one
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="authorizationRequested"></param>
-        public void HandleAuthorizationRequested(object sender, AuthorizationRequested authorizationRequested)
+        public void InvokeAuthorizationRequested(string ckey, NetworkConnectionToClient sender)
         {
-            HandleAuthorizePlayer(authorizationRequested);
+            CmdInvokeAuthorizationRequested(ckey, sender);
         }
 
         /// <summary>
@@ -146,6 +158,8 @@ namespace SS3D.Core.PlayerControl
         {
             CmdInvokePlayerLeftServer(soul);
         }
+
+
     }
 
     /// <summary>
@@ -153,6 +167,8 @@ namespace SS3D.Core.PlayerControl
     /// </summary>
     public interface IPlayerControlManagerService
     {
+        void InvokeAuthorizationRequested(string ckey, NetworkConnectionToClient networkConnectionToClient);
+
         void InvokePlayerJoinedServer(Soul soul);
         void InvokePlayerLeftServer(Soul soul);
     }

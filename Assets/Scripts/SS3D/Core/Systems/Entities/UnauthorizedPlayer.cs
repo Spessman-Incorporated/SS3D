@@ -12,23 +12,26 @@ namespace SS3D.Core.Systems.Entities
     /// </summary>
     public sealed class UnauthorizedPlayer : NetworkBehaviour
     {
-        private void Start()
+        public override void OnStartLocalPlayer()
         {
-            CmdTryToAuthorizeUser(LocalPlayerAccountManager.Ckey);
+            base.OnStartLocalPlayer();
+
+            Setup();
+            NetworkServer.Destroy(gameObject);
         }
 
-        /// <summary>
-        /// Tries to connect back to the existing Soul or create a new one
-        /// </summary>
-        [Command(requiresAuthority = false)]
-        private void CmdTryToAuthorizeUser(string ckey, NetworkConnectionToClient sender = null)
+        private void Setup()
         {
-            Debug.Log("Unauthorized player: try to authorize player");
+            bool testingServerOnlyInEditor = isServer && ApplicationStateManager.Instance.TestingServerOnlyInEditor && Application.isEditor;
+            if (testingServerOnlyInEditor)
+            {
+                gameObject.name = "Editor Server"; 
+                return;
+            }
 
-            // sends the Ckey to validate and assign a Soul to this
-            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
-            PlayerControlManager.AuthorizationRequested authorizationRequested = new PlayerControlManager.AuthorizationRequested(ckey, sender);
-            eventService!.Invoke(null, authorizationRequested);
+            string ckey = LocalPlayerAccountManager.Ckey;
+            NetworkConnectionToClient conn = netIdentity.connectionToClient;
+            ServiceLocator.Shared.Get<IPlayerControlManagerService>()?.InvokeAuthorizationRequested(ckey, conn);
         }
     }
 }

@@ -24,8 +24,10 @@ namespace SS3D.Core
 
         [Header("Test Cases")]
         [SerializeField] private bool testingClientInEditor;
+        [SerializeField] private bool testingServerOnlyInEditor;
 
         public bool TestingClientInEditor => testingClientInEditor;
+        public bool TestingServerOnlyInEditor => testingServerOnlyInEditor;
 
         private void Awake()
         {

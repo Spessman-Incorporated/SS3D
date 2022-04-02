@@ -184,7 +184,7 @@ GameObject:
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
-  m_Icon: {fileID: 2800000, guid: 449023493f4f5bf459d6bde76b93d2f4, type: 3}
+  m_Icon: {fileID: 2800000, guid: 3d28f43fc3410a245943f786fecf4538, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -777,6 +777,7 @@ MonoBehaviour:
   scenes: {fileID: 11400000, guid: 4fb3c3d510918a2438cfc8a4deba786c, type: 2}
   networkHelper: {fileID: 1628220427}
   testingClientInEditor: 0
+  testingServerOnlyInEditor: 1
 --- !u!1 &1628220425
 GameObject:
   m_ObjectHideFlags: 0

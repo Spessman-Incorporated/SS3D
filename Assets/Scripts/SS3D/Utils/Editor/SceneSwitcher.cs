@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -17,13 +18,12 @@ namespace SS3D.Utils.Editor
 		{
 			GUILayout.FlexibleSpace();
 
-
-            if(GUILayout.Button(new GUIContent("Startup","Load Scene Startup"), new[] {GUILayout.Width(65), GUILayout.Height(19)}))
+			if(GUILayout.Button(new GUIContent("Startup","Load Scene Startup, use this to start the game"), new[] {GUILayout.Width(65), GUILayout.Height(19)}))
 			{
 				SceneHelper.StartScene("Startup");
 			}
 
-			if(GUILayout.Button(new GUIContent("Lobby", "Load Scene Lobby"), new[] {GUILayout.Width(65), GUILayout.Height(19)}))
+			if(GUILayout.Button(new GUIContent("Lobby", "Load Scene Lobby, use this to develop in-game stuff"), new[] {GUILayout.Width(65), GUILayout.Height(19)}))
 			{
 				SceneHelper.StartScene("Lobby");
 			}
@@ -75,3 +75,4 @@ namespace SS3D.Utils.Editor
 		}
 	}
 }
+#endif
