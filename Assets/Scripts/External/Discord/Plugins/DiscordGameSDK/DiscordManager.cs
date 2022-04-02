@@ -32,7 +32,6 @@ namespace UDiscord
 
         void Start()
         {
-            if(Discord_Stay) { DontDestroyOnLoad(this);}
             if(Discord_Start) OnConnect.AddListener(CallDiscord); OnConnect?.Invoke();
         }
         void Update()
@@ -226,7 +225,7 @@ namespace UDiscord
         {
             Debug.Log("Discord Shutdown after 10 sec");
             Shutdown();
-            discord.Dispose();
+            discord?.Dispose();
         }
 
         #endregion

@@ -10,7 +10,7 @@ namespace SS3D.Core
 {
     /// <summary>
     /// Responsible for controlling the game state, persistent throughout the application
-    /// Should hopefully be the only singleton in the project
+    /// Should hopefully be the only Singleton in the project
     /// </summary>
     public sealed class ApplicationStateManager : MonoBehaviour
     {

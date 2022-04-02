@@ -42,7 +42,7 @@ namespace SS3D.Core.Networking.Helper
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             eventService.AddListener<ServerConnectionUIHelper.RetryButtonClicked>(InitiateNetworkSession);
             
-            _networkManager = NetworkManager.singleton;
+            _networkManager = NetworkManager.Singleton;
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace SS3D.Core.Networking.Helper
         public void InitiateNetworkSession()
         {
             if (_networkManager == null)
-                _networkManager = NetworkManager.singleton;
+                _networkManager = NetworkManager.Singleton;
 
             if (_isHost)
             {

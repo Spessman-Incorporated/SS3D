@@ -13,36 +13,6 @@ namespace SS3D.Core.Networking
     /// </summary>
     public sealed class SpessmanNetworkManager : NetworkManager
     {
-        public override void OnServerAddPlayer(NetworkConnection conn)
-        {
-            Transform startPos = GetStartPosition();
-            GameObject player = startPos != null
-                ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
-                : Instantiate(playerPrefab);
-
-            // instantiating a "Player" prefab gives it the name "Player(clone)"
-            // => appending the connectionId is WAY more useful for debugging!
-            player.name = "Waiting for validation: " + conn.connectionId;
-            NetworkServer.AddPlayerForConnection(conn, player);
-        }
-
-        public override void OnClientConnect()
-        {
-            // OnClientConnect by default calls AddPlayer but it should not do
-            // that when we have online/offline scenes. so we need the
-            // clientLoadedScene flag to prevent it.
-            if (!clientLoadedScene)
-            {
-                // Ready/AddPlayer is usually triggered by a scene load completing.
-                // if no scene was loaded, then Ready/AddPlayer it here instead.
-                if (!NetworkClient.ready)
-                    NetworkClient.Ready();
-
-                if (autoCreatePlayer)
-                    NetworkClient.AddPlayer();
-            }
-        }
-
         public override void OnServerDisconnect(NetworkConnection conn)
         {
             NetworkIdentity[] ownedObjects = new NetworkIdentity[conn.clientOwnedObjects.Count];

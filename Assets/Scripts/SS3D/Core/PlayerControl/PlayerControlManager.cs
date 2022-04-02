@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Coimbra;
 using Mirror;
+using SS3D.Core.Networking;
 using SS3D.Core.Systems.Entities;
 using UnityEngine;
 
@@ -11,6 +14,10 @@ namespace SS3D.Core.PlayerControl
     /// </summary>
     public sealed class PlayerControlManager : NetworkBehaviour, IPlayerControlManagerService
     {
+        [SerializeField] private GameObject _soulPrefab;
+
+        private SyncList<Soul> _serverSouls = new SyncList<Soul>();
+
         [Serializable]
         public struct AuthorizationRequested
         {
@@ -21,20 +28,11 @@ namespace SS3D.Core.PlayerControl
         }
 
         [Serializable]
-        public struct UpdateCkeyRequested
-        {
-            public Soul Soul;
-            public string Ckey;
-
-            public UpdateCkeyRequested(Soul soul, string newCkey) { this.Soul = soul; this.Ckey = newCkey; }
-        }
-
-        [Serializable]
         public struct PlayerJoinedServer
         {
             public Soul Soul;
             
-            public PlayerJoinedServer(Soul soul) { this.Soul = soul; }
+            public PlayerJoinedServer(Soul soul) { Soul = soul; }
         }
 
         [Serializable]
@@ -42,7 +40,7 @@ namespace SS3D.Core.PlayerControl
         {
             public Soul Soul;
 
-            public PlayerLeftServer(Soul soul) { this.Soul = soul; }
+            public PlayerLeftServer(Soul soul) { Soul = soul; }
         }
 
         private void Awake()
@@ -55,14 +53,7 @@ namespace SS3D.Core.PlayerControl
         {
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             
-            eventService?.AddListener<UpdateCkeyRequested>(OnUpdateCkeyRequested);
-        }
-
-        public void OnUpdateCkeyRequested(object sender, UpdateCkeyRequested updateCkeyRequested)
-        {
-            Soul soul = updateCkeyRequested.Soul;
-            soul.CmdUpdateCkey(updateCkeyRequested.Ckey);
-            InvokePlayerJoinedServer(soul);
+            eventService?.AddListener<AuthorizationRequested>(HandleAuthorizationRequested);
         }
 
         /// <summary>
@@ -92,18 +83,48 @@ namespace SS3D.Core.PlayerControl
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             eventService?.Invoke(this, playerJoinedServer);
         }
-        
+
         /// <summary>
-        /// Interface implementation, called when we use the ServiceLocator
+        /// Used by the server to validate credentials and reassign souls to clients
         /// </summary>
-        /// <param name="soul"></param>
-        /// <param name="newCkey"></param>
-        public void InvokeUpdateCkeyRequested(Soul soul, string newCkey)
+        /// <param name="authorizationRequested">struct containing the ckey and the connection that sent it</param>
+        [Server]
+        public void HandleAuthorizePlayer(AuthorizationRequested authorizationRequested)
         {
-            UpdateCkeyRequested updateCkeyRequested = new UpdateCkeyRequested(soul, newCkey);
-            
-            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
-            eventService?.Invoke(this, updateCkeyRequested);
+            Debug.Log("Handle Authorize Player " + authorizationRequested.Ckey);
+
+            string ckey = authorizationRequested.Ckey;
+
+            Soul match = null;
+            foreach (Soul soul in _serverSouls.Where((soul) => soul.Ckey == ckey))
+            {
+                match = soul;
+            }
+
+            if (match == null)
+            {
+                Debug.Log("No Soul match found, creating a new one");
+
+                match = Instantiate(_soulPrefab).GetComponent<Soul>();
+                match.SetCkey(string.Empty ,ckey);
+                _serverSouls.Add(match);
+
+                NetworkServer.Spawn(match.gameObject);
+            }
+
+            // assign authority so the player can own it
+            match.netIdentity.AssignClientAuthority(authorizationRequested.NetworkConnectionToClient);
+            InvokePlayerJoinedServer(match);
+        }
+
+        /// <summary>
+        /// Used when we want to validate an user's credentials (only using ckey for now)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="authorizationRequested"></param>
+        public void HandleAuthorizationRequested(object sender, AuthorizationRequested authorizationRequested)
+        {
+            HandleAuthorizePlayer(authorizationRequested);
         }
 
         /// <summary>
@@ -127,9 +148,11 @@ namespace SS3D.Core.PlayerControl
         }
     }
 
+    /// <summary>
+    /// Interface used by the ServiceLocator, so we can use these functions everywhere
+    /// </summary>
     public interface IPlayerControlManagerService
     {
-        void InvokeUpdateCkeyRequested(Soul soul, string newCkey);
         void InvokePlayerJoinedServer(Soul soul);
         void InvokePlayerLeftServer(Soul soul);
     }

@@ -3,6 +3,7 @@ using Coimbra;
 using Mirror;
 using SS3D.Core.Networking;
 using SS3D.Core.PlayerControl;
+using UnityEngine;
 
 namespace SS3D.Core.Systems.Entities
 {
@@ -19,22 +20,22 @@ namespace SS3D.Core.Systems.Entities
         /// </summary>
         public string Ckey => _ckey;
 
-        public override void OnStartLocalPlayer()
-        {
-            base.OnStartLocalPlayer();
-            
-            // Sends the command to update the Ckey on the server
-            ServiceLocator.Shared.Get<IPlayerControlManagerService>()?.InvokeUpdateCkeyRequested(this, LocalPlayerAccountManager.Ckey);
-        }
-
         /// <summary>
         /// Uses a network command to update the Ckey
         /// </summary>
         [Command(requiresAuthority = false)]
         public void CmdUpdateCkey(string ckey, NetworkConnectionToClient sender = null)
         {
+
             SetCkey(_ckey, ckey);
             gameObject.name = "Soul: " + ckey;
+            //RpcUpdateCkey();
+        }
+
+        [ClientRpc]
+        public void RpcUpdateCkey()
+        {
+            gameObject.name = "Soul: " + Ckey;
         }
         
         /// <summary>
@@ -42,8 +43,9 @@ namespace SS3D.Core.Systems.Entities
         /// 
         /// This is also called by the server when the client enters the server to update his data
         /// </summary>
-        private void SetCkey(string oldCkey, string newCkey)
+        public void SetCkey(string oldCkey, string newCkey)
         {
+            Debug.Log("Updating player ckey");
             _ckey = newCkey; 
             gameObject.name = "Soul: " + _ckey;
         }

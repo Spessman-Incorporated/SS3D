@@ -43,7 +43,7 @@ namespace Mirror
         /// </summary>
         public void Start()
         {
-            if (NetworkManager.singleton is NetworkRoomManager room)
+            if (NetworkManager.Singleton is NetworkRoomManager room)
             {
                 // NetworkRoomPlayer object must be set to DontDestroyOnLoad along with NetworkRoomManager
                 // in server and all clients, otherwise it will be respawned in the game scene which would
@@ -64,7 +64,7 @@ namespace Mirror
 
         public virtual void OnDisable()
         {
-            if (NetworkClient.active && NetworkManager.singleton is NetworkRoomManager room)
+            if (NetworkClient.active && NetworkManager.Singleton is NetworkRoomManager room)
             {
                 // only need to call this on client as server removes it before object is destroyed
                 room.roomSlots.Remove(this);
@@ -81,7 +81,7 @@ namespace Mirror
         public void CmdChangeReadyState(bool readyState)
         {
             readyToBegin = readyState;
-            NetworkRoomManager room = NetworkManager.singleton as NetworkRoomManager;
+            NetworkRoomManager room = NetworkManager.Singleton as NetworkRoomManager;
             if (room != null)
             {
                 room.ReadyStatusChanged();
@@ -133,7 +133,7 @@ namespace Mirror
             if (!showRoomGUI)
                 return;
 
-            NetworkRoomManager room = NetworkManager.singleton as NetworkRoomManager;
+            NetworkRoomManager room = NetworkManager.Singleton as NetworkRoomManager;
             if (room)
             {
                 if (!room.showRoomGUI)

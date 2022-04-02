@@ -97,7 +97,7 @@ namespace Mirror
         public static int startPositionIndex;
 
         /// <summary>The one and only NetworkManager</summary>
-        public static NetworkManager singleton { get; private set; }
+        public static NetworkManager Singleton { get; private set; }
 
         /// <summary>Number of active player objects across all connections on the server.</summary>
         public int numPlayers => NetworkServer.connections.Count(kv => kv.Value.identity != null);
@@ -633,7 +633,7 @@ namespace Mirror
                 //Debug.Log("OnApplicationQuit: stopped server");
             }
 
-            // Call ResetStatics to reset statics and singleton
+            // Call ResetStatics to reset statics and Singleton
             ResetStatics();
         }
 
@@ -650,12 +650,12 @@ namespace Mirror
 
         bool InitializeSingleton()
         {
-            if (singleton != null && singleton == this)
+            if (Singleton != null && Singleton == this)
                 return true;
 
             if (dontDestroyOnLoad)
             {
-                if (singleton != null)
+                if (Singleton != null)
                 {
                     Debug.LogWarning("Multiple NetworkManagers detected in the scene. Only one NetworkManager can exist at a time. The duplicate NetworkManager will be destroyed.");
                     Destroy(gameObject);
@@ -663,8 +663,8 @@ namespace Mirror
                     // Return false to not allow collision-destroyed second instance to continue.
                     return false;
                 }
-                //Debug.Log("NetworkManager created singleton (DontDestroyOnLoad)");
-                singleton = this;
+                //Debug.Log("NetworkManager created Singleton (DontDestroyOnLoad)");
+                Singleton = this;
                 if (Application.isPlaying)
                 {
                     // Force the object to scene root, in case user made it a child of something
@@ -675,11 +675,11 @@ namespace Mirror
             }
             else
             {
-                //Debug.Log("NetworkManager created singleton (ForScene)");
-                singleton = this;
+                //Debug.Log("NetworkManager created Singleton (ForScene)");
+                Singleton = this;
             }
 
-            // set active transport AFTER setting singleton.
+            // set active transport AFTER setting Singleton.
             // so only if we didn't destroy ourselves.
             Transport.activeTransport = transport;
             return true;
@@ -711,14 +711,14 @@ namespace Mirror
                 NetworkClient.RegisterPrefab(prefab);
         }
 
-        // This is the only way to clear the singleton, so another instance can be created.
+        // This is the only way to clear the Singleton, so another instance can be created.
         // RuntimeInitializeOnLoadMethod -> fast playmode without domain reload
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void ResetStatics()
         {
-            // call StopHost if we have a singleton
-            if (singleton)
-                singleton.StopHost();
+            // call StopHost if we have a Singleton
+            if (Singleton)
+                Singleton.StopHost();
 
             // reset all statics
             startPositions.Clear();
@@ -728,7 +728,7 @@ namespace Mirror
             networkSceneName = string.Empty;
 
             // and finally (in case it isn't null already)...
-            singleton = null;
+            Singleton = null;
         }
 
         // virtual so that inheriting classes' OnDestroy() can call base.OnDestroy() too
@@ -1048,7 +1048,7 @@ namespace Mirror
         /// </summary>
         /// <param name="start">Transform to register.</param>
         // Static because it's called from NetworkStartPosition::Awake
-        // and singleton may not exist yet
+        // and Singleton may not exist yet
         public static void RegisterStartPosition(Transform start)
         {
             // Debug.Log($"RegisterStartPosition: {start.gameObject.name} {start.position}");
@@ -1063,7 +1063,7 @@ namespace Mirror
 
         /// <summary>Unregister a Transform from start positions.</summary>
         // Static because it's called from NetworkStartPosition::OnDestroy
-        // and singleton may not exist yet
+        // and Singleton may not exist yet
         public static void UnRegisterStartPosition(Transform start)
         {
             //Debug.Log($"UnRegisterStartPosition: {start.name} {start.position}");
