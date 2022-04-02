@@ -2,7 +2,8 @@
     "name": "SS3D.Utils",
     "rootNamespace": "",
     "references": [
-        "DOTween.Modules"
+        "DOTween.Modules",
+        "ToolbarExtender.Editor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

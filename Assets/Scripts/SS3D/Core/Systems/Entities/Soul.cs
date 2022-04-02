@@ -1,8 +1,6 @@
 using System;
 using Coimbra;
 using Mirror;
-using SS3D.Core.Networking;
-using SS3D.Core.PlayerControl;
 using UnityEngine;
 
 namespace SS3D.Core.Systems.Entities
