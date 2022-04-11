@@ -19,15 +19,6 @@ namespace SS3D.Core.PlayerControl
         private SyncList<Soul> _serverSouls = new SyncList<Soul>();
 
         [Serializable]
-        public struct AuthorizationRequested
-        {
-            public string Ckey;
-            public NetworkConnectionToClient NetworkConnectionToClient;
-
-            public AuthorizationRequested(string ckey, NetworkConnectionToClient networkConnectionToClient) { this.Ckey = ckey; this.NetworkConnectionToClient = networkConnectionToClient; }
-        }
-
-        [Serializable]
         public struct PlayerJoinedServer
         {
             public Soul Soul;
@@ -52,8 +43,8 @@ namespace SS3D.Core.PlayerControl
         private void SubscribeToEvents()
         {
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
-            
-            eventService?.AddListener<AuthorizationRequested>(HandleAuthorizePlayer);
+
+            NetworkServer.RegisterHandler<UserAuthorizationMessage>(HandleAuthorizePlayer);
         }
 
         /// <summary>
@@ -87,27 +78,14 @@ namespace SS3D.Core.PlayerControl
         }
 
         /// <summary>
-        /// Tries to connect back to the existing Soul or create a new one
+        /// Used by the server to validate credentials and reassign souls to clients.
+        /// TODO: Actual authentication
         /// </summary>
-        [Command(requiresAuthority = false)]
-        private void CmdInvokeAuthorizationRequested(string ckey, NetworkConnectionToClient sender = null)
-        {
-            // sends the Ckey to validate and assign a Soul to this
-            IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
-            AuthorizationRequested authorizationRequested = new AuthorizationRequested(ckey, sender);
-            eventService!.Invoke(this, authorizationRequested);
-
-            Debug.Log($"[{typeof(PlayerControlManager)}] - CMD - Invoke authorization requested: {ckey}");
-        }
-
-        /// <summary>
-        /// Used by the server to validate credentials and reassign souls to clients
-        /// </summary>
-        /// <param name="authorizationRequested">struct containing the ckey and the connection that sent it</param>
+        /// <param name="userAuthorizationMessage">struct containing the ckey and the connection that sent it</param>
         [Server]
-        public void HandleAuthorizePlayer(object sender, AuthorizationRequested authorizationRequested)
+        public void HandleAuthorizePlayer(NetworkConnection conn, UserAuthorizationMessage userAuthorizationMessage)
         {
-            string ckey = authorizationRequested.Ckey;
+            string ckey = userAuthorizationMessage.Ckey;
 
             Soul match = null;
             foreach (Soul soul in _serverSouls.Where((soul) => soul.Ckey == ckey))
@@ -128,18 +106,10 @@ namespace SS3D.Core.PlayerControl
             }
 
             // assign authority so the player can own it
-            match.netIdentity.AssignClientAuthority(authorizationRequested.NetworkConnectionToClient);
+            NetworkServer.AddPlayerForConnection(conn, match.gameObject);
             InvokePlayerJoinedServer(match);
 
             Debug.Log($"[{typeof(PlayerControlManager)}] - SERVER - Handle Authorize Player: {match.Ckey}");
-        }
-
-        /// <summary>
-        /// Tries to connect back to the existing Soul or create a new one
-        /// </summary>
-        public void InvokeAuthorizationRequested(string ckey, NetworkConnectionToClient sender)
-        {
-            CmdInvokeAuthorizationRequested(ckey, sender);
         }
 
         /// <summary>
@@ -166,10 +136,8 @@ namespace SS3D.Core.PlayerControl
     /// <summary>
     /// Interface used by the ServiceLocator, so we can use these functions everywhere
     /// </summary>
-    public interface IPlayerControlManagerService
+    public interface IPlayerControlManagerService   
     {
-        void InvokeAuthorizationRequested(string ckey, NetworkConnectionToClient networkConnectionToClient);
-
         void InvokePlayerJoinedServer(Soul soul);
         void InvokePlayerLeftServer(Soul soul);
     }

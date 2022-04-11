@@ -38,7 +38,6 @@ namespace SS3D.Core.Systems.Entities
         
         /// <summary>
         /// Used by Mirror Networking to update the variable and sync it across instances.
-        /// 
         /// This is also called by the server when the client enters the server to update his data
         /// </summary>
         public void SetCkey(string oldCkey, string newCkey)

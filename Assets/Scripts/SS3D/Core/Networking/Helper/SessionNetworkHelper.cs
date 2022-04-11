@@ -46,7 +46,7 @@ namespace SS3D.Core.Networking.Helper
         }
 
         /// <summary>
-        /// Gets the command line arguments from the executable, for example: "-server-_ip localhost"
+        /// Gets the command line arguments from the executable, for example: "-server=localhost"
         /// </summary>
         private void GetCommandLineArgs()
         {
@@ -69,6 +69,7 @@ namespace SS3D.Core.Networking.Helper
             if (Application.isEditor)
             {
                 _isHost = !applicationStateManager.TestingClientInEditor;
+                _ip = "localhost";
                 _ckey = "editorUser";
                 Debug.Log($"[{typeof(SessionNetworkHelper)}] - Testing application on the editor as {_ckey}");
             }

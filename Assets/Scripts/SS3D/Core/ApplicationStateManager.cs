@@ -36,15 +36,35 @@ namespace SS3D.Core
 
         private void Setup()
         {
+            Debug.Log($"[{typeof(ApplicationStateManager)}] - Initializing application");
+
+            InitializeSingleton();
+            ProcessTestParams();
+            InitializeEssentialSystems();
+        }
+
+        private void ProcessTestParams()
+        {
+            if (!Application.isEditor)
+            {
+                testingClientInEditor = false;
+                testingServerOnlyInEditor = false;
+            }
+        }
+        private void InitializeSingleton()
+        {
             if (Instance == null)
             {
                 Instance = this;
             }
+            Debug.Log($"[{typeof(ApplicationStateManager)}] - Initializing Application State Manager singleton");
+        }
 
+        private void InitializeEssentialSystems()
+        {
             DOTween.Init();
             networkHelper.ProcessCommandLineArgs();
-
-            Debug.Log($"[{typeof(ApplicationStateManager)}] - Initializing application");
+            Debug.Log($"[{typeof(ApplicationStateManager)}] - Initializing essential systems");
         }
     }
 }
