@@ -314,7 +314,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _root: {fileID: 1160312072}
   _loadingIcon: {fileID: 1160312071}
-  _loadingIconAnimationDuration: 0.7
+  _loadingMovement: {x: 0, y: 0, z: -360}
+  _loadingIconAnimationDuration: 0.6
+  _buttonsUiFade: {fileID: 1160312073}
   _buttons: {fileID: 934291766}
   _quitButton: {fileID: 487745583}
   _retryButton: {fileID: 830207184}
@@ -353,41 +355,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1928667160}
     m_Modifications:
-    - target: {fileID: 1042289194392677500, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 862.7266
+    - target: {fileID: 1160312077, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
+      propertyPath: _transitionDuration
+      value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 1042289194392677500, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 132.0935
+    - target: {fileID: 1042289194657444836, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
+      propertyPath: m_Name
+      value: Server Connection Screen
       objectReference: {fileID: 0}
-    - target: {fileID: 1042289194392677500, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 219.06213
+    - target: {fileID: 1042289194657444836, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1042289194392677501, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_fontSize
-      value: 71.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1042289194392677501, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 686b2ac321bf10947a917bd1fb28664b, type: 2}
-    - target: {fileID: 1042289194392677501, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_fontStyle
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1042289194392677501, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_fontSizeMax
-      value: 173.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1042289194392677501, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: -5327258657527903640, guid: 686b2ac321bf10947a917bd1fb28664b, type: 2}
     - target: {fileID: 1042289195677559625, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
       propertyPath: m_Name
       value: Server Connection Screen Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1042289195677559636, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1715077267}
+    - target: {fileID: 1042289195677559636, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1042289195677559637, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
       propertyPath: m_Pivot.x
@@ -473,21 +463,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3633782980432631112, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3633782980432631112, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_Color.b
-      value: 0.9960785
-      objectReference: {fileID: 0}
-    - target: {fileID: 3633782980432631112, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3633782980432631112, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
-      propertyPath: m_Color.r
-      value: 0.85098046
+    - target: {fileID: 1042289196295219727, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -154.9765
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
@@ -506,6 +484,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1042289195677559625, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
   m_PrefabInstance: {fileID: 1160312069}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1160312073 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5393264752809146195, guid: 83e602c09f6d862428c09d7503632bfd, type: 3}
+  m_PrefabInstance: {fileID: 1160312069}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934291766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dba9eb6d9cd9eb54aa3db0f6af5263e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1161832577
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,7 +809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scenes: {fileID: 11400000, guid: 4fb3c3d510918a2438cfc8a4deba786c, type: 2}
   networkHelper: {fileID: 1628220427}
-  testingClientInEditor: 0
+  testingClientInEditor: 1
   testingServerOnlyInEditor: 0
 --- !u!1 &1628220425
 GameObject:

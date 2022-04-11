@@ -6,6 +6,7 @@ using kcp2k;
 using Mirror;
 using SS3D.Data;
 using SS3D.Data.Messages;
+using SS3D.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -22,9 +23,11 @@ namespace SS3D.Core.Networking.UI_Helper
     
         [Header("Loading Icon")]
         [SerializeField] private Transform _loadingIcon;
+        [SerializeField] private Vector3 _loadingMovement = new Vector3(0, 0, -360);
         [SerializeField] private float _loadingIconAnimationDuration;
 
-        [Header("Buttons")]
+        [Header("Buttons")] 
+        [SerializeField] private UiFade _buttonsUiFade;
         [SerializeField] private GameObject _buttons;
         [SerializeField] private Button _quitButton;
         [SerializeField] private Button _retryButton;
@@ -50,7 +53,6 @@ namespace SS3D.Core.Networking.UI_Helper
         private void Setup()
         {
             UpdateMessageText(ApplicationMessages.Network.ConnectingToServer);
-            
             _buttons.SetActive(false);                            
         }
 
@@ -82,7 +84,7 @@ namespace SS3D.Core.Networking.UI_Helper
             }
             
             // loops a rotating animation
-            _loadingIcon.DOLocalRotate(new Vector3(0, -360, 0), _loadingIconAnimationDuration, RotateMode.LocalAxisAdd).OnComplete(ProcessConnectingToServer).SetEase(Ease.Linear);
+            _loadingIcon.DOLocalRotate(_loadingMovement, _loadingIconAnimationDuration, RotateMode.LocalAxisAdd).OnComplete(ProcessConnectingToServer).SetEase(Ease.Linear);
         }
 
         private void OnRetryButtonPressed()
@@ -103,6 +105,7 @@ namespace SS3D.Core.Networking.UI_Helper
             _connectionFailed = true;
             _buttons.SetActive(true);
             _loadingIcon.gameObject.SetActive(false);
+            _buttonsUiFade.ProcessFade();
             UpdateMessageText(ApplicationMessages.Network.ConnectionFailed);
         }
     }
