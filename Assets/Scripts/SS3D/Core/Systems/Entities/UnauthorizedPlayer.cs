@@ -17,6 +17,7 @@ namespace SS3D.Core.Systems.Entities
             base.OnStartLocalPlayer();
 
             Setup();
+            Debug.Log($"[{typeof(UnauthorizedPlayer)}] - OnStartLocalPlayer - Destroying temporary player");
             NetworkServer.Destroy(gameObject);
         }
 

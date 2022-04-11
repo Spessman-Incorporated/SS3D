@@ -90,11 +90,11 @@ namespace UDiscord
             {
                 if(res == Result.Ok)
                 {
-                    Debug.Log("Discord Status Is On!");
+                    Debug.Log($"[{typeof(DiscordManager)}] - Discord Status Is On!");
                 }
                 else
                 {
-                    Debug.LogError("Discord Status Failed!");
+                    Debug.LogError($"[{typeof(DiscordManager)}] - Discord Status Failed!");
                 }
             });
         }
@@ -147,11 +147,11 @@ namespace UDiscord
             {
                 if(res == Result.Ok)
                 {
-                    Debug.Log("Discord Status Is On!");
+                    Debug.Log($"[{typeof(DiscordManager)}] - Discord Status Is On!");
                 }
                 else
                 {
-                    Debug.LogError("Discord Status Failed!");
+                    Debug.LogError($"[{typeof(DiscordManager)}] - Discord Status Failed!");
                 }
             });
         }
@@ -203,16 +203,16 @@ namespace UDiscord
                 activityManager.SendInvite(485905734618447895, ActivityActionType.Join, "", (inviteUserResult) =>
                 {
                     Console.WriteLine("Invite User {0}", inviteUserResult);
-                    Debug.Log("How is This Working >???");
+                    Debug.Log($"[{typeof(DiscordManager)}] - How is This Working >???");
                 });
 
                 if(res == Result.Ok)
                 {
-                    Debug.Log("Discord Status Is On!");
+                    Debug.Log($"[{typeof(DiscordManager)}] - Discord Status Is On!");
                 }
                 else
                 {
-                    Debug.LogError("Discord Status Failed!");
+                    Debug.LogError($"[{typeof(DiscordManager)}] - Discord Status Failed!");
                 }
             });
         }
@@ -223,7 +223,7 @@ namespace UDiscord
         //OnDisable means when object is disabled or game turned off
         void OnDisable()
         {
-            Debug.Log("Discord Shutdown after 10 sec");
+            Debug.Log($"[{typeof(DiscordManager)}] - Discord Shutdown after 10 seconds");
             Shutdown();
             discord?.Dispose();
         }

@@ -25,7 +25,7 @@ namespace SS3D.Core.Networking
                     continue;
 
                 ServiceLocator.Shared.Get<IPlayerControlManagerService>()?.InvokePlayerLeftServer(soul);
-                Debug.Log("Invoking the player server left event");
+                Debug.Log($"[{typeof(SpessmanNetworkManager)}] - Invoking the player server left event");
             }
         }
     }

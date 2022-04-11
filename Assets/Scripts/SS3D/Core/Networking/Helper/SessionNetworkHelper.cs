@@ -40,7 +40,7 @@ namespace SS3D.Core.Networking.Helper
         {
             // Uses the event service to listen to lobby events
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
-            eventService.AddListener<ServerConnectionUIHelper.RetryButtonClicked>(InitiateNetworkSession);
+            eventService?.AddListener<ServerConnectionUIHelper.RetryButtonClicked>(InitiateNetworkSession);
             
             _networkManager = NetworkManager.Singleton;
         }
@@ -56,7 +56,7 @@ namespace SS3D.Core.Networking.Helper
             }
             catch (Exception e)
             {
-                Debug.LogError("GetCommandLineArgs: " + e);
+                Debug.LogError($"[{typeof(SessionNetworkHelper)}] - GetCommandLineArgs: {e}");
                 throw;
             }
         }
@@ -70,6 +70,7 @@ namespace SS3D.Core.Networking.Helper
             {
                 _isHost = !applicationStateManager.TestingClientInEditor;
                 _ckey = "editorUser";
+                Debug.Log($"[{typeof(SessionNetworkHelper)}] - Testing application on the editor as {_ckey}");
             }
             else
             {
@@ -93,6 +94,8 @@ namespace SS3D.Core.Networking.Helper
                         _ckey = value.Replace(CommandLineArgs.Ckey, "");
                     }
                 }
+
+                Debug.Log($"[{typeof(SessionNetworkHelper)}] - Testing application on executable");
             }
 
             LocalPlayerAccountManager.UpdateCkey(_ckey);
@@ -109,11 +112,13 @@ namespace SS3D.Core.Networking.Helper
 
             if (_isHost)
             {
+                Debug.Log($"[{typeof(SessionNetworkHelper)}] - Hosting a new server");
                 _networkManager.StartHost();
             }
 
             else
             {
+                Debug.Log($"[{typeof(SessionNetworkHelper)}] - Joining to server {_ip} as {_ckey}");
                 _networkManager.StartClient(UriParser.TryParseIpAddress(_ip));
             }
         }

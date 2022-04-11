@@ -63,11 +63,12 @@ namespace SS3D.Core.PlayerControl
         [Command(requiresAuthority = false)]
         public void CmdInvokePlayerLeftServer(Soul soul)
         {
-            Debug.Log("player control left server");
             PlayerLeftServer playerLeftServer = new PlayerLeftServer(soul);
 
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             eventService?.Invoke(this, playerLeftServer);
+
+            Debug.Log($"[{typeof(PlayerControlManager)}] - CMD - Player left server: {soul.Ckey}");
         }
         
         /// <summary>
@@ -77,11 +78,12 @@ namespace SS3D.Core.PlayerControl
         [Command(requiresAuthority = false)]
         public void CmdInvokePlayerJoinedServer(Soul soul)
         {
-            Debug.Log("player control joined server");
             PlayerJoinedServer playerJoinedServer = new PlayerJoinedServer(soul);
             
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             eventService?.Invoke(this, playerJoinedServer);
+
+            Debug.Log($"[{typeof(PlayerControlManager)}] - CMD - Player joined server: {soul.Ckey}");
         }
 
         /// <summary>
@@ -90,12 +92,12 @@ namespace SS3D.Core.PlayerControl
         [Command(requiresAuthority = false)]
         private void CmdInvokeAuthorizationRequested(string ckey, NetworkConnectionToClient sender = null)
         {
-            Debug.Log("CmdInvokeAuthorizationRequested");
-
             // sends the Ckey to validate and assign a Soul to this
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             AuthorizationRequested authorizationRequested = new AuthorizationRequested(ckey, sender);
             eventService!.Invoke(this, authorizationRequested);
+
+            Debug.Log($"[{typeof(PlayerControlManager)}] - CMD - Invoke authorization requested: {ckey}");
         }
 
         /// <summary>
@@ -105,19 +107,18 @@ namespace SS3D.Core.PlayerControl
         [Server]
         public void HandleAuthorizePlayer(object sender, AuthorizationRequested authorizationRequested)
         {
-            Debug.Log("Handle Authorize Player " + authorizationRequested.Ckey);
-
             string ckey = authorizationRequested.Ckey;
 
             Soul match = null;
             foreach (Soul soul in _serverSouls.Where((soul) => soul.Ckey == ckey))
             {
                 match = soul;
+                Debug.Log($"[{typeof(PlayerControlManager)}] - SERVER - Soul match for {soul} found, reassigning to client");
             }
 
             if (match == null)
             {
-                Debug.Log("No Soul match found, creating a new one");
+                Debug.Log($"[{typeof(PlayerControlManager)}] - SERVER - No Soul match for {ckey} found, creating a new one");
 
                 match = Instantiate(_soulPrefab).GetComponent<Soul>();
                 match.SetCkey(string.Empty ,ckey);
@@ -129,6 +130,8 @@ namespace SS3D.Core.PlayerControl
             // assign authority so the player can own it
             match.netIdentity.AssignClientAuthority(authorizationRequested.NetworkConnectionToClient);
             InvokePlayerJoinedServer(match);
+
+            Debug.Log($"[{typeof(PlayerControlManager)}] - SERVER - Handle Authorize Player: {match.Ckey}");
         }
 
         /// <summary>
@@ -158,8 +161,6 @@ namespace SS3D.Core.PlayerControl
         {
             CmdInvokePlayerLeftServer(soul);
         }
-
-
     }
 
     /// <summary>

@@ -33,7 +33,7 @@ namespace SS3D.Core.Networking.UI_Helper
 
         public struct RetryButtonClicked {}
 
-        private bool connectionFailed;
+        private bool _connectionFailed;
         
         private void Start()
         {
@@ -51,7 +51,7 @@ namespace SS3D.Core.Networking.UI_Helper
         {
             UpdateMessageText(ApplicationMessages.Network.ConnectingToServer);
             
-            _buttons.SetActive(false);
+            _buttons.SetActive(false);                            
         }
 
         private void SubscribeToEvents()
@@ -76,7 +76,7 @@ namespace SS3D.Core.Networking.UI_Helper
         /// </summary>
         private void ProcessConnectingToServer()
         {
-            if (connectionFailed)
+            if (_connectionFailed)
             {
                 return;
             }
@@ -87,7 +87,7 @@ namespace SS3D.Core.Networking.UI_Helper
 
         private void OnRetryButtonPressed()
         {
-            connectionFailed = false;
+            _connectionFailed = false;
             _buttons.SetActive(false);
             _loadingIcon.gameObject.SetActive(true);
             UpdateMessageText(ApplicationMessages.Network.ConnectingToServer);
@@ -100,7 +100,7 @@ namespace SS3D.Core.Networking.UI_Helper
         
         private void OnServerConnectionFailed()
         {
-            connectionFailed = true;
+            _connectionFailed = true;
             _buttons.SetActive(true);
             _loadingIcon.gameObject.SetActive(false);
             UpdateMessageText(ApplicationMessages.Network.ConnectionFailed);

@@ -43,6 +43,8 @@ namespace SS3D.Core
 
             DOTween.Init();
             networkHelper.ProcessCommandLineArgs();
+
+            Debug.Log($"[{typeof(ApplicationStateManager)}] - Initializing application");
         }
     }
 }

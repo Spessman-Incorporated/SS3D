@@ -43,7 +43,7 @@ namespace SS3D.Core.Systems.Entities
         /// </summary>
         public void SetCkey(string oldCkey, string newCkey)
         {
-            Debug.Log("Updating player ckey");
+            Debug.Log($"[{typeof(Soul)}] - SyncVarHook - Updating player ckey");
             _ckey = newCkey; 
             gameObject.name = "Soul: " + _ckey;
         }
