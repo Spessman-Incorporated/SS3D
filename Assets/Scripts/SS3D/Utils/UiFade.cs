@@ -25,12 +25,18 @@ namespace SS3D.Utils
 
         private void Start()
         {
+            Setup();
+        }
+
+        private void Setup()
+        {
+            gameObject.SetActive(true);
+
             if (_fadeOnStart)
             {
                 ProcessFade();
             }
         }
-
         public void ProcessFade()
         { 
             bool fadeOut = _intendedState == State.On;
