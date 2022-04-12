@@ -769,7 +769,7 @@ namespace Mirror
 
             if (identity.connectionToClient != null && identity.connectionToClient != conn)
             {
-                Debug.LogError($"Cannot replace player for connection. New player is already owned by a different connection{player}");
+                Debug.LogError($"Cannot replace player for connection. New player is already owned by a different connection {player}");
                 return false;
             }
 

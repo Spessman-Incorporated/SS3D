@@ -643,7 +643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: d9c3167f4018dc04c9d26c90df1417cd, type: 2}
+  sharedProfile: {fileID: 11400000, guid: c0ba4991830f8cb4ebe7a584b0717f7c, type: 2}
   isGlobal: 1
   blendDistance: 0
   weight: 1
@@ -1732,6 +1732,7 @@ GameObject:
   m_Component:
   - component: {fileID: 618991011}
   - component: {fileID: 618991012}
+  - component: {fileID: 618991013}
   m_Layer: 0
   m_Name: Player Username List UI Helper
   m_TagString: Untagged
@@ -1768,6 +1769,23 @@ MonoBehaviour:
   _root: {fileID: 1011821734}
   _playerUsernames: []
   _uiPrefab: {fileID: 2412237211694884709, guid: 90b8893c80d4fbd4a91e7bdcd36a4829, type: 3}
+--- !u!114 &618991013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618991010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 409090701
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &622277638
 GameObject:
   m_ObjectHideFlags: 0

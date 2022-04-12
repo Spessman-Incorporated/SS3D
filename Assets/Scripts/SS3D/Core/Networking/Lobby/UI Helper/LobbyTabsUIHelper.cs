@@ -6,7 +6,7 @@ namespace SS3D.Core.Lobby.UI_Helper
 {
     public sealed class LobbyTabsUIHelper : MonoBehaviour
     {
-        [SerializeField] private GenericTabUI[] _categoryUi;
+        [SerializeField] private GenericTabUIHelper[] _categoryUi;
         
         private void Start()
         {
@@ -28,7 +28,7 @@ namespace SS3D.Core.Lobby.UI_Helper
 
         private void OnTabButtonClicked(int index)
         {
-            foreach (GenericTabUI tab in _categoryUi)
+            foreach (GenericTabUIHelper tab in _categoryUi)
             {
                 tab.UpdateCategoryState(tab == _categoryUi[index]);
             }

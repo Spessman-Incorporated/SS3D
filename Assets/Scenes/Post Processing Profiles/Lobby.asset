@@ -15,10 +15,10 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   intensity:
     overrideState: 1
-    value: -16.1
+    value: -27
   intensityX:
     overrideState: 0
     value: 1
@@ -103,7 +103,7 @@ MonoBehaviour:
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 0.148
+    value: 0
   fastMode:
     overrideState: 0
     value: 0
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
-  m_Name: Main Camera Profile
+  m_Name: Lobby
   m_EditorClassIdentifier: 
   settings:
   - {fileID: -4675224793483223533}
@@ -151,7 +151,7 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.156
+    value: 0.238
   smoothness:
     overrideState: 0
     value: 0.2

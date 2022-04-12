@@ -1,11 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Coimbra;
-using TMPro;
+using Mirror;
+using SS3D.Core.Lobby.UI;
+using SS3D.Core.Networking.PlayerControl.Messages;
 using UnityEngine;
 
-namespace SS3D.Core.Lobby.UI
+namespace SS3D.Core.Networking.Lobby.UI_Helper
 {
     /// <summary>
     /// Controls the player list in the lobby
@@ -19,13 +20,13 @@ namespace SS3D.Core.Lobby.UI
         /// <summary>
         /// Username list, local list that is "networked" by the SyncList on LobbyManager
         /// </summary>
-        [SerializeField] private List<PlayerUsernameUI> _playerUsernames;
+        [SerializeField] private List<PlayerUsernameUIHelper> _playerUsernames;
         /// <summary>
         /// The Username panel prefab
         /// </summary>
         [SerializeField] private GameObject _uiPrefab;
 
-        private void Start()
+        private void Awake()
         {
             SubscribeToEvents();
         }
@@ -38,8 +39,8 @@ namespace SS3D.Core.Lobby.UI
             // Uses the event service to listen to lobby events
             IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
             
-            eventService!.AddListener<LobbyManager.PlayerJoinedLobby>(AddUsernameUI);
-            eventService!.AddListener<LobbyManager.PlayerDisconnectedFromLobby>(RemoveUsernameUI);
+            eventService!.AddListener<LobbyManager.UserJoinedLobby>(AddUsernameUI);
+            eventService!.AddListener<LobbyManager.UserLeftLobby>(RemoveUsernameUI);
         }
 
         /// <summary>
@@ -47,10 +48,10 @@ namespace SS3D.Core.Lobby.UI
         /// </summary>
         /// <param name="sender">Required by the ServiceLocator, unused in this function</param>
         /// <param name="data">A PlayerJoinedlobby event, that simply carries the Username</param>
-        public void AddUsernameUI(object sender, LobbyManager.PlayerJoinedLobby data)
+        public void AddUsernameUI(object sender, LobbyManager.UserJoinedLobby data)
         {
             // if this Username already exists we return
-            if (_playerUsernames.Exists((player) => data.Username == player.Name))
+            if (_playerUsernames.Exists((player) => data.Ckey == player.Name))
             {
                 return;
             }
@@ -58,9 +59,9 @@ namespace SS3D.Core.Lobby.UI
             // adds the UI element and updates the text
             GameObject uiInstance = Instantiate(_uiPrefab, _root);
 
-            PlayerUsernameUI playerUsernameUI = uiInstance.GetComponent<PlayerUsernameUI>();
-            playerUsernameUI.UpdateNameText(data.Username);
-            _playerUsernames.Add(playerUsernameUI);
+            PlayerUsernameUIHelper playerUsernameUIHelper = uiInstance.GetComponent<PlayerUsernameUIHelper>();
+            playerUsernameUIHelper.UpdateNameText(data.Ckey);
+            _playerUsernames.Add(playerUsernameUIHelper);
         }
         
         /// <summary>
@@ -68,10 +69,10 @@ namespace SS3D.Core.Lobby.UI
         /// </summary>
         /// <param name="sender">Required by the ServiceLocator, unused in this function</param>
         /// <param name="data">A PlayerJoinedlobby event, that simply carries the Username</param>
-        private void RemoveUsernameUI(object sender, LobbyManager.PlayerDisconnectedFromLobby data)
+        private void RemoveUsernameUI(object sender,  LobbyManager.UserLeftLobby data)
         {
-            PlayerUsernameUI removedUsername = null;
-            foreach (PlayerUsernameUI playerUsernameUI in _playerUsernames.Where(playerUsernameUI => playerUsernameUI.Name.Equals(data.Username)))
+            PlayerUsernameUIHelper removedUsername = null;
+            foreach (PlayerUsernameUIHelper playerUsernameUI in _playerUsernames.Where(playerUsernameUI => playerUsernameUI.Name.Equals(data.Ckey)))
             {
                 removedUsername = playerUsernameUI;
                 Destroy(playerUsernameUI.gameObject);

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Coimbra;
 using Mirror;
 using SS3D.Core.Networking.Helper;
-using SS3D.Core.PlayerControl;
+using SS3D.Core.Networking.PlayerControl.Messages;
 using SS3D.Core.Systems.Entities;
 using UnityEngine;
 
@@ -16,16 +16,31 @@ namespace SS3D.Core.Networking
     {
         public override void OnServerDisconnect(NetworkConnection conn)
         {
+            Debug.Log($"[{typeof(SpessmanNetworkManager)}] - Client {conn.address} disconnected");
+
             NetworkIdentity[] ownedObjects = new NetworkIdentity[conn.clientOwnedObjects.Count];
             conn.clientOwnedObjects.CopyTo(ownedObjects);
-            foreach (var networkIdentity in ownedObjects)
-            {
-                Soul soul = networkIdentity.GetComponent<Soul>();
-                if (soul == null) 
-                    continue;
 
-                ServiceLocator.Shared.Get<IPlayerControlManagerService>()?.InvokePlayerLeftServer(soul);
-                Debug.Log($"[{typeof(SpessmanNetworkManager)}] - Invoking the player server left event");
+            if (ownedObjects.Length == 0)
+            {
+                Debug.LogError($"[{typeof(SpessmanNetworkManager)}] - No clientOwnedObjects were found, something is very wrong");
+                return;
+            }
+
+            foreach (NetworkIdentity networkIdentity in ownedObjects)
+            {
+                Debug.Log($"[{typeof(SpessmanNetworkManager)}] - Client {conn.address}'s owned object: {networkIdentity.name}");
+
+                Soul soul = networkIdentity.GetComponent<Soul>();
+                if (soul == null)
+                {
+                    Debug.LogError($"[{typeof(SpessmanNetworkManager)}] - No Soul found in clientOwnedObjects, something is very wrong");
+                    return;
+                }
+
+                NetworkServer.RemovePlayerForConnection(conn, false);
+                NetworkServer.SendToAll(new UserLeftServerMessage(soul.Ckey));
+                Debug.Log($"[{typeof(SpessmanNetworkManager)}] - Invoking the player server left event: {soul.Ckey}");
             }
         }
     }

@@ -18,18 +18,6 @@ namespace SS3D.Core.Systems.Entities
         /// </summary>
         public string Ckey => _ckey;
 
-        /// <summary>
-        /// Uses a network command to update the Ckey
-        /// </summary>
-        [Command(requiresAuthority = false)]
-        public void CmdUpdateCkey(string ckey, NetworkConnectionToClient sender = null)
-        {
-
-            SetCkey(_ckey, ckey);
-            gameObject.name = "Soul: " + ckey;
-            //RpcUpdateCkey();
-        }
-
         [ClientRpc]
         public void RpcUpdateCkey()
         {

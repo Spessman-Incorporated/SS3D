@@ -2,7 +2,7 @@ using System;
 using Coimbra;
 using Mirror;
 using SS3D.Core.Networking;
-using SS3D.Core.PlayerControl;
+using SS3D.Core.Networking.PlayerControl.Messages;
 using UnityEngine;
 
 namespace SS3D.Core.Systems.Entities
@@ -22,25 +22,33 @@ namespace SS3D.Core.Systems.Entities
         {
             string ckey = LocalPlayerAccountManager.Ckey;
 
-            CmdDestroyAfterLogin();
-            Destroy(gameObject);
-
-            Debug.Log($"[{typeof(UnauthorizedPlayer)}] - OnStartLocalPlayer - Destroying temporary player for {ckey}");
-
             bool testingServerOnlyInEditor = isServer && ApplicationStateManager.Instance.TestingServerOnlyInEditor && Application.isEditor;
             if (testingServerOnlyInEditor)
             {
                 return;
             }
 
+            CmdRemoveConnectionAfterLogin();
             UserAuthorizationMessage userAuthorizationMessage = new UserAuthorizationMessage(ckey);
             NetworkClient.Send(userAuthorizationMessage);
+
+            CmdDestroyObjectAfterLogin();
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdDestroyAfterLogin()
+        private void CmdDestroyObjectAfterLogin()
         {
             NetworkServer.Destroy(gameObject);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdRemoveConnectionAfterLogin()
+        {
+            string ckey = LocalPlayerAccountManager.Ckey;
+    
+            Debug.Log($"[{typeof(UnauthorizedPlayer)}] - OnStartLocalPlayer - Destroying temporary player for {ckey}");
+            NetworkServer.RemovePlayerForConnection(connectionToClient, false);
+            //NetworkServer.Destroy(gameObject);
         }
     }
 }
