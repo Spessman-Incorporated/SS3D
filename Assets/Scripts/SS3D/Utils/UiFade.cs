@@ -13,6 +13,7 @@ namespace SS3D.Utils
 
         [Header("Components")]
         [SerializeField] private CanvasGroup _canvasGroup;
+
         [Header("Settings")]
         [SerializeField] private float _transitionDuration;
         [SerializeField] private State _intendedState;

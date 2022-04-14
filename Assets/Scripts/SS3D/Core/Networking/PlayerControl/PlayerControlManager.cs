@@ -62,7 +62,6 @@ namespace SS3D.Core.Networking.PlayerControl
 
                 NetworkServer.Spawn(match.gameObject);
             }
-            //match.netIdentity.AssignClientAuthority(conn);
             NetworkServer.AddPlayerForConnection(conn, match.gameObject);
 
             UserJoinedServerMessage userJoinedServerMessage = new UserJoinedServerMessage(match.Ckey);

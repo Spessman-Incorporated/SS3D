@@ -6,7 +6,7 @@ namespace SS3D.Core.Helper.Intro
     /// <summary>
     /// This class simply manages the UI in the intro
     /// </summary>
-    public class IntroUIHelper : MonoBehaviour
+    public sealed class IntroUIHelper : MonoBehaviour
     {
         [Header("UI")]
         [SerializeField] private CanvasGroup _introUiFade;
@@ -38,6 +38,7 @@ namespace SS3D.Core.Helper.Intro
             }
         }
 
+        // Please don't mess with this, its disgusting
         private void TurnOnConnectionUIAfterFade()
         {
             _introUiFade.alpha = 0;

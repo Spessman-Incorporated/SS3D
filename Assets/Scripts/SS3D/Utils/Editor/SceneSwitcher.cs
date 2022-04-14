@@ -7,36 +7,38 @@ using UnityToolbarExtender;
 namespace SS3D.Utils.Editor
 {
 	[InitializeOnLoad]
-	public class SceneSwitchLeftButton
+	public sealed class SceneSwitchLeftButton
 	{
 		static SceneSwitchLeftButton()
 		{
 			ToolbarExtender.LeftToolbarGUI.Add(OnToolbarGUI);
 		}
 
-		static void OnToolbarGUI()
+		public static void OnToolbarGUI()
 		{
 			GUILayout.FlexibleSpace();
 
-			if(GUILayout.Button(new GUIContent("Startup","Load Scene Startup, use this to start the game"), new[] {GUILayout.Width(65), GUILayout.Height(19)}))
+			if (GUILayout.Button(new GUIContent("Startup", "Load Scene Startup, use this to start the game"),
+				    new[] { GUILayout.Width(65), GUILayout.Height(19) }))
 			{
 				SceneHelper.StartScene("Startup");
 			}
 
-			if(GUILayout.Button(new GUIContent("Lobby", "Load Scene Lobby, use this to develop in-game stuff"), new[] {GUILayout.Width(65), GUILayout.Height(19)}))
+			if (GUILayout.Button(new GUIContent("Lobby", "Load Scene Lobby, use this to develop in-game stuff"),
+				    new[] { GUILayout.Width(65), GUILayout.Height(19) }))
 			{
 				SceneHelper.StartScene("Lobby");
 			}
 		}
 	}
 
-	static class SceneHelper
+	public static class SceneHelper
 	{
-		static string SceneToOpen;
+		private static string SceneToOpen;
 
 		public static void StartScene(string sceneName)
 		{
-			if(EditorApplication.isPlaying)
+			if (EditorApplication.isPlaying)
 			{
 				EditorApplication.isPlaying = false;
 			}
@@ -45,7 +47,7 @@ namespace SS3D.Utils.Editor
 			EditorApplication.update += OnUpdate;
 		}
 
-		static void OnUpdate()
+		public static void OnUpdate()
 		{
 			if (SceneToOpen == null ||
 			    EditorApplication.isPlaying || EditorApplication.isPaused ||
@@ -56,7 +58,7 @@ namespace SS3D.Utils.Editor
 
 			EditorApplication.update -= OnUpdate;
 
-			if(EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+			if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
 			{
 				// need to get scene via search because the path to the scene
 				// file contains the package version so it'll change over time
@@ -71,6 +73,7 @@ namespace SS3D.Utils.Editor
 					EditorSceneManager.OpenScene(scenePath);
 				}
 			}
+
 			SceneToOpen = null;
 		}
 	}

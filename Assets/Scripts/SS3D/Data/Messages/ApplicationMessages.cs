@@ -7,8 +7,8 @@ namespace SS3D.Data.Messages
     {
         public static class Network
         {
-            public static string ConnectingToServer = "Connecting to server";
-            public static string ConnectionFailed = "Connection to server failed";
+            public const string ConnectingToServer = "Connecting to server";
+            public const string ConnectionFailed = "Connection to server failed";
         }
     }
 }

@@ -11,9 +11,7 @@ namespace SS3D.Core.Networking.Lobby
     /// </summary>
     public sealed class LobbyManager : NetworkBehaviour
     {
-        /// <summary>
-        /// Current lobby players
-        /// </summary>
+        // Current lobby players
         private readonly SyncList<string> _players = new SyncList<string>();
 
         [Serializable]

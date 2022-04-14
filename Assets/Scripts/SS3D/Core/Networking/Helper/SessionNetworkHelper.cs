@@ -17,11 +17,8 @@ namespace SS3D.Core.Networking.Helper
     public sealed class SessionNetworkHelper : MonoBehaviour
     {
         [SerializeField] private ApplicationStateManager applicationStateManager; 
-        private NetworkManager _networkManager;
         
-        /// <summary>
-        /// The command line arguments read by the GetCommandLineArgs
-        /// </summary>
+        private NetworkManager _networkManager;
         private List<string> _commandLineArgs;
         
         private bool _isHost;
@@ -33,9 +30,6 @@ namespace SS3D.Core.Networking.Helper
             Setup();
         }
         
-        /// <summary>
-        /// Generic method that prepares the class on Start or Awake
-        /// </summary>
         private void Setup()
         {
             // Uses the event service to listen to lobby events
@@ -45,9 +39,7 @@ namespace SS3D.Core.Networking.Helper
             _networkManager = NetworkManager.Singleton;
         }
 
-        /// <summary>
-        /// Gets the command line arguments from the executable, for example: "-server=localhost"
-        /// </summary>
+        // Gets the command line arguments from the executable, for example: "-server=localhost"
         private void GetCommandLineArgs()
         {
             try
@@ -61,9 +53,7 @@ namespace SS3D.Core.Networking.Helper
             }
         }
 
-        /// <summary>
-        /// Uses the args to determine if we have to connect or host, etc
-        /// </summary>
+        // Uses the args to determine if we have to connect or host, etc
         private void ProcessCommandLineArgs()
         {
             if (Application.isEditor)
@@ -132,11 +122,7 @@ namespace SS3D.Core.Networking.Helper
             }
         }
         
-        /// <summary>
-        /// Overload to match the event type
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        // Overload to match the event type
         private void InitiateNetworkSession(object sender, ServerConnectionUIHelper.RetryButtonClicked e)
         {
             InitiateNetworkSession();

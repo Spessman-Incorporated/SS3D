@@ -1,9 +1,10 @@
-using System;
-using SS3D.Core.Lobby.UI;
 using UnityEngine;
 
-namespace SS3D.Core.Lobby.UI_Helper
+namespace SS3D.Core.Networking.Lobby.UI_Helper
 {
+    /// <summary>
+    /// Manages the lobby tabs
+    /// </summary>
     public sealed class LobbyTabsUIHelper : MonoBehaviour
     {
         [SerializeField] private GenericTabUIHelper[] _categoryUi;

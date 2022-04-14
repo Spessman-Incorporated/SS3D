@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Coimbra;
 using Mirror;
-using SS3D.Core.Lobby.UI;
 using SS3D.Core.Networking.PlayerControl.Messages;
 using UnityEngine;
 
@@ -13,17 +12,13 @@ namespace SS3D.Core.Networking.Lobby.UI_Helper
     /// </summary>
     public sealed class PlayerUsernameListUIHelper : MonoBehaviour
     {
-        /// <summary>
-        /// The UI element this is linked to
-        /// </summary>
+        // The UI element this is linked to
         [SerializeField] private Transform _root;
-        /// <summary>
-        /// Username list, local list that is "networked" by the SyncList on LobbyManager
-        /// </summary>
+        
+        // Username list, local list that is "networked" by the SyncList on LobbyManager
         [SerializeField] private List<PlayerUsernameUIHelper> _playerUsernames;
-        /// <summary>
-        /// The Username panel prefab
-        /// </summary>
+        
+        // The username panel prefab
         [SerializeField] private GameObject _uiPrefab;
 
         private void Awake()
@@ -31,9 +26,7 @@ namespace SS3D.Core.Networking.Lobby.UI_Helper
             SubscribeToEvents();
         }
 
-        /// <summary>
-        /// Generic method to agglomerate all event managing
-        /// </summary>
+        // Generic method to agglomerate all event managing
         public void SubscribeToEvents()
         {
             // Uses the event service to listen to lobby events
