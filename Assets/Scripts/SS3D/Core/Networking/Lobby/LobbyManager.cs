@@ -57,7 +57,7 @@ namespace SS3D.Core.Networking.Lobby
             {
                 IEventService eventService = ServiceLocator.Shared.Get<IEventService>();
                 eventService?.Invoke(null, new UserJoinedLobby(player));
-            }
+            }                                                                                   
         }
 
         [Server]
@@ -94,6 +94,5 @@ namespace SS3D.Core.Networking.Lobby
 
             Debug.Log($"[{typeof(LobbyManager)}] - RPC - Removed player from lobby: {userLeftLobby.Ckey}");
         }
-
     }
 }
