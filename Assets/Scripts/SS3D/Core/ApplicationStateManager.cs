@@ -15,56 +15,71 @@ namespace SS3D.Core
     public sealed class ApplicationStateManager : MonoBehaviour
     {
         public static ApplicationStateManager Instance;
-        
-        [Header("Scenes")]
-        [SerializeField] private Scenes scenes;
-        
+
         [Header("Managers")]
-        [SerializeField] private SessionNetworkHelper networkHelper;
+        [SerializeField] private SessionNetworkHelper _networkHelper;
+
+        [Header("Settings")] 
+        [SerializeField] private bool _skipIntro;
 
         [Header("Test Cases")]
-        [SerializeField] private bool testingClientInEditor;
-        [SerializeField] private bool testingServerOnlyInEditor;
+        [SerializeField] private bool _testingClientInEditor;
+        [SerializeField] private bool _testingServerOnlyInEditor;
 
-        public bool TestingClientInEditor => testingClientInEditor;
-        public bool TestingServerOnlyInEditor => testingServerOnlyInEditor;
+        public bool SkipIntro => _skipIntro;
+        public bool TestingClientInEditor => _testingClientInEditor;
+        public bool TestingServerOnlyInEditor => _testingServerOnlyInEditor;
 
         private void Awake()
         {
-            Setup();
+            InitializeSingleton();
+            InitializeEssentialSystems();
         }
 
-        private void Setup()
+        public void InitializeApplication()
         {
             Debug.Log($"[{typeof(ApplicationStateManager)}] - Initializing application");
 
-            InitializeSingleton();
             ProcessTestParams();
-            InitializeEssentialSystems();
+            InitializeNetworkSession();
         }
 
         private void ProcessTestParams()
         {
-            if (!Application.isEditor)
+            if (Application.isEditor)
             {
-                testingClientInEditor = false;
-                testingServerOnlyInEditor = false;
+                return;
             }
+
+            _testingClientInEditor = false;
+            _testingServerOnlyInEditor = false;
         }
+
         private void InitializeSingleton()
         {
             if (Instance == null)
             {
                 Instance = this;
             }
+
             Debug.Log($"[{typeof(ApplicationStateManager)}] - Initializing Application State Manager singleton");
         }
 
         private void InitializeEssentialSystems()
         {
             DOTween.Init();
-            networkHelper.ProcessCommandLineArgs();
             Debug.Log($"[{typeof(ApplicationStateManager)}] - Initializing essential systems");
+        }
+        
+        public void InitializeNetworkSession() 
+        {
+            _networkHelper.InitiateNetworkSession();
+            Debug.Log($"[{typeof(ApplicationStateManager)}] - Initializing network session");
+        }
+
+        public void SetSkipIntro(bool state)
+        {
+            _skipIntro = state;
         }
     }
 }

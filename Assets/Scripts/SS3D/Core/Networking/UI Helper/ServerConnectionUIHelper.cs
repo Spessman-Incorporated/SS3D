@@ -20,6 +20,7 @@ namespace SS3D.Core.Networking.UI_Helper
     public sealed class ServerConnectionUIHelper : MonoBehaviour
     {
         [SerializeField] private GameObject _root;
+        [SerializeField] private UiFade _rootUiFade;
     
         [Header("Loading Icon")]
         [SerializeField] private Transform _loadingIcon;
@@ -72,7 +73,7 @@ namespace SS3D.Core.Networking.UI_Helper
         {
             _messageText.text = message;
         }
-        
+
         /// <summary>
         /// Loops the rotating animation using DOTween until we are ot connecting anymore
         /// </summary>
@@ -89,6 +90,7 @@ namespace SS3D.Core.Networking.UI_Helper
 
         private void OnRetryButtonPressed()
         {
+
             _connectionFailed = false;
             _buttons.SetActive(false);
             _loadingIcon.gameObject.SetActive(true);

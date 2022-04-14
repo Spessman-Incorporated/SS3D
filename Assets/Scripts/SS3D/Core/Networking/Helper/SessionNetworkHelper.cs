@@ -64,7 +64,7 @@ namespace SS3D.Core.Networking.Helper
         /// <summary>
         /// Uses the args to determine if we have to connect or host, etc
         /// </summary>
-        public void ProcessCommandLineArgs()
+        private void ProcessCommandLineArgs()
         {
             if (Application.isEditor)
             {
@@ -100,7 +100,6 @@ namespace SS3D.Core.Networking.Helper
             }
 
             LocalPlayerAccountManager.UpdateCkey(_ckey);
-            InitiateNetworkSession();
         }
 
         /// <summary>
@@ -108,6 +107,8 @@ namespace SS3D.Core.Networking.Helper
         /// </summary>
         public void InitiateNetworkSession()
         {
+            ProcessCommandLineArgs();
+
             if (_networkManager == null)
                 _networkManager = NetworkManager.Singleton;
 
