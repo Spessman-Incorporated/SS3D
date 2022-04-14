@@ -78,21 +78,28 @@ namespace SS3D.Core.Networking.Helper
                 GetCommandLineArgs();
                 foreach (string arg in _commandLineArgs)
                 {
-                    string value = arg;
-
-                    if (value.Contains(CommandLineArgs.Host))
+                    if (arg.Contains(CommandLineArgs.Host))
                     {
                         _isHost = true;
+                        Debug.Log($"[{typeof(SessionNetworkHelper)}] - Command args - {CommandLineArgs.Host} - is true");
                     }
                     
-                    if (value.Contains(CommandLineArgs.Ip))
+                    if (arg.Contains(CommandLineArgs.Ip))
                     {
-                        _ip = value.Replace(CommandLineArgs.Ip, "");
+                        _ip = arg.Replace(CommandLineArgs.Ip, "");
+                        Debug.Log($"[{typeof(SessionNetworkHelper)}] - Command args - {CommandLineArgs.Ip} - {_ip}");
                     }
 
-                    if (value.Contains(CommandLineArgs.Ckey))
+                    if (arg.Contains(CommandLineArgs.Ckey))
                     {
-                        _ckey = value.Replace(CommandLineArgs.Ckey, "");
+                        _ckey = arg.Replace(CommandLineArgs.Ckey, "");
+                        Debug.Log($"[{typeof(SessionNetworkHelper)}] - Command args - {CommandLineArgs.Ckey} - {_ckey}");                        
+                    }
+
+                    if (arg.Contains(CommandLineArgs.SkipIntro))
+                    {
+                        ApplicationStateManager.Instance.SetSkipIntro(true);
+                        Debug.Log($"[{typeof(SessionNetworkHelper)}] - Command args - {CommandLineArgs.SkipIntro} - {true}");
                     }
                 }
 

@@ -8,9 +8,17 @@ namespace SS3D.Core.Helper.Intro
     /// </summary>
     public class IntroUIHelper : MonoBehaviour
     {
+        [Header("UI")]
         [SerializeField] private CanvasGroup _introUiFade;
         [SerializeField] private CanvasGroup _connectionUiFade;
-        [SerializeField] private float _transitionDuration;
+        
+        [Header("Settings")]
+        [SerializeField] private float _fadeInDuration;
+        [SerializeField] private float _fadeOutDuration;
+        [SerializeField] private float _splashScreenFreezeDuration;
+
+        [Header("Temporary")]
+        [SerializeField] private AudioSource _temporaryAudioSource;
 
         private void Awake()
         {
@@ -21,6 +29,7 @@ namespace SS3D.Core.Helper.Intro
         {
             if (ApplicationStateManager.Instance.SkipIntro)
             {
+                Destroy(_temporaryAudioSource);
                 ApplicationStateManager.Instance.InitializeApplication();
             }
             else
@@ -33,11 +42,11 @@ namespace SS3D.Core.Helper.Intro
         {
             _introUiFade.alpha = 0;
 
-            _introUiFade.DOFade(1, _transitionDuration / 3).OnComplete(() =>
+            _introUiFade.DOFade(1, _fadeInDuration).SetEase(Ease.InExpo).OnComplete(() =>
             {
-                _introUiFade.DOFade(0, _transitionDuration).SetDelay(3).OnComplete(() =>
+                _introUiFade.DOFade(0, _fadeOutDuration).SetDelay(_splashScreenFreezeDuration).OnComplete(() =>
                 {
-                    _connectionUiFade.DOFade(1, _transitionDuration / 2);
+                    _connectionUiFade.DOFade(1, _fadeInDuration);
                 }).OnComplete(ApplicationStateManager.Instance.InitializeApplication);
             }).SetEase(Ease.InCubic);
         }
